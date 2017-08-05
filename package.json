@@ -1,54 +1,32 @@
 {
-  "name": "Portal",
-  "description": "Harbour portal",
-  "version": "0.0.1",
-  "keywords": [
-    "ethereum",
-    "dao",
-    "web3",
-    "typescript",
-    "harbour"
-  ],
-  "contributors": [
-    {
-      "name": "Samuel Furter",
-      "email": "",
-      "web": ""
-    },
-    {
-      "name": "Dean Eigenmann",
-      "email": "",
-      "web": ""
-    }
-  ],
-  "maintainers": [
-    {
-      "name": "Harbour",
-      "email": "",
-      "web": "harbour.tokenate.io"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/decanus/portal"
-    }
-  ],
-  "licenses": [
-    {
-      "name": "GNU-GPL",
-      "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
-    }
-  ],
-  "dependencies": {
-    "ethereumjs-testrpc": "^4.0.1",
-    "ts-loader": "^2.3.2",
-    "typescript": "^2.4.2",
-    "web3": "^1.0.0-beta.15",
-    "webpack": "^3.4.1",
-    "webpack-dev-server": "^2.6.1"
-  },
+  "name": "es6-boilerplate",
+  "version": "1.0.0",
+  "description": "Standard ES6 Boilerplate configured with babel, webpack and eslint.",
+  "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js"
-  }	
+    "start": "npm-run-all --parallel dev:server lint:watch",
+    "dev:server": "webpack-dev-server --hot --inline",
+    "watch": "webpack -w -d",
+    "build": "webpack -p",
+    "lint": "node_modules/.bin/esw webpack.config.* src --color",
+    "lint:watch": "npm run lint -- --watch"
+  },
+  "keywords": [
+    "es6"
+  ],
+  "author": "metagrover",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^3.5.0",
+    "eslint-watch": "^2.1.14",
+    "npm-run-all": "^4.0.2",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "web3": "^1.0.0-beta.15"
+  }
 }

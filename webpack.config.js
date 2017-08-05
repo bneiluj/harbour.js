@@ -1,17 +1,15 @@
-var path = require("path");
-
 module.exports = {
-  entry: "./app/main.ts",
-  output: {
-    path: __dirname,
-    filename: "dist/app.js"
-  },
-  resolve: {
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
-  },
-  module: {
-    loaders: [
-      { test: /\.tsx?$/, loader: "ts-loader" }
-    ]
-  }
-}
+    entry: __dirname + '/src/index.js',
+    output: {
+        path: __dirname + '/dist',
+        publicPath: '/dist/',
+        filename: 'bundle.js'
+    },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: 'babel-loader'
+        }]
+    }
+};
