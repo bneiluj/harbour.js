@@ -1,0 +1,54 @@
+{
+  "name": "Portal",
+  "description": "Harbour portal",
+  "version": "0.0.1",
+  "keywords": [
+    "ethereum",
+    "dao",
+    "web3",
+    "typescript",
+    "harbour"
+  ],
+  "contributors": [
+    {
+      "name": "Samuel Furter",
+      "email": "",
+      "web": ""
+    },
+    {
+      "name": "Dean Eigenmann",
+      "email": "",
+      "web": ""
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Harbour",
+      "email": "",
+      "web": "harbour.tokenate.io"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/decanus/portal"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "GNU-GPL",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.de.html"
+    }
+  ],
+  "dependencies": {
+    "ethereumjs-testrpc": "^4.0.1",
+    "ts-loader": "^2.3.2",
+    "typescript": "^2.4.2",
+    "web3": "^1.0.0-beta.15",
+    "webpack": "^3.4.1",
+    "webpack-dev-server": "^2.6.1"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  }	
+}
