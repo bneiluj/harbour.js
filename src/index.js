@@ -1,8 +1,8 @@
 
 class Application {
-    init() {
+    bootstrap() {
         this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8546"));
-        this.connectConfigurationContract();
+        this.client = new Client(new Harbour(this.web3));
     }
 
     connectConfigurationContract() {
@@ -16,4 +16,4 @@ class Application {
 }
 
 var app = new Application();
-app.init();
+app.bootstrap();
