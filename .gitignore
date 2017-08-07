@@ -58,4 +58,4 @@ typings/
 .env
 
 ressources/
-
+package-lock.json
