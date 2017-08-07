@@ -7,13 +7,13 @@ import * as utilities from './utilities';
 import * as tokens from './tokens';
 
 var harbour = {
-    account: account,
-    congress: congress,
-    proposals: proposals,
-    repositories: repositories,
-    tokens: tokens,
-    utilities: utilities,
-    tokens: tokens
+    account,
+    congress,
+    proposals,
+    repositories,
+    tokens,
+    utilities,
+    tokens
 }
 
 export {harbour as Harbour};
