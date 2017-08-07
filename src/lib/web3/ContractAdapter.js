@@ -2,7 +2,7 @@ export default class ContractAdapter {
     construct(web3, abi, address, gasPrice, from) {
         this.address = address;
         this.from = from;
-        this.contract = web3.eth.Contract(
+        this.contract = new web3.eth.Contract(
             this.abi,
             this.address,
             {
