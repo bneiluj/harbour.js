@@ -1,9 +1,9 @@
 module.exports = {
-    entry: __dirname + '/src/index.js',
+    entry: __dirname + '/lib/harbour.js',
     output: {
         path: __dirname + '/dist',
         publicPath: '/dist/',
-        filename: 'app.js'
+        filename: 'harbour.js'
     },
     module: {
         rules: [{
@@ -11,5 +11,11 @@ module.exports = {
             exclude: /node_modules/,
             use: 'babel-loader'
         }]
+    },
+    resolve: {
+        alias: { 
+            ContractAdapter: './web3/ContractAdapter.js'
+        },
+        extensions: ['.js', '.es6']
     }
 };
