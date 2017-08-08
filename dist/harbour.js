@@ -91,8 +91,9 @@ class ContractAdapter {
      * @param {number} gasPrice 
      * @param {string} from 
      */
-    construct(web3, abi, address, gasPrice, from) {
+    constructor(web3, abi, address, gasPrice = undefined, from = undefined) {
         this.from = from;
+        this.abi = abi;
         this.contract = new web3.eth.Contract(this.abi, address, {
             gasPrice: gasPrice,
             from: this.from
