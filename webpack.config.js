@@ -3,7 +3,9 @@ module.exports = {
     output: {
         path: __dirname + '/dist',
         publicPath: '/dist/',
-        filename: 'harbour.js'
+        filename: 'harbour.js',
+        library: "Harbour",
+        libraryTarget: "umd",
     },
     module: {
         rules: [{
