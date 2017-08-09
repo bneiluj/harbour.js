@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -104,11 +104,11 @@ class ContractAdapter {
     /**
      * Run function from contract
      * @param {string} methodName 
-     * @param {params} contractArguments 
+     * @param {params} methodArguments 
      * @return \Provide
      */
-    getMethod(methodName, contractArguments) {
-        this.contract.methods[methodName].apply(this.contract, contractArguments);
+    getMethod(methodName, methodArguments) {
+        return this.contract.methods[methodName].apply(this.contract, methodArguments);
     }
 
     /**
@@ -130,41 +130,41 @@ class ContractAdapter {
     /**
      * Get estimate gas for method
      * @param {string} methodName 
-     * @param {array} contractArguments 
+     * @param {array} methodArguments 
      * @return \Provide
      */
-    estimateGas(methodName, contractArguments) {
-        return this.getMethod(methodNamename, contractArguments).estimateGas({ from: this.from });
+    estimateGas(methodName, methodArguments) {
+        return this.getMethod(methodNamename, methodArguments).estimateGas({ from: this.from });
     }
 
     /**
      * Call method on contract
      * @param {string} methodName 
-     * @param {array} contractArguments
+     * @param {array} methodArguments
      * @return \Provide 
      */
-    callMethod(methodName, contractArguments) {
-        return this.getMethod(methodNamename, contractArguments).call({ from: this.from });
+    callMethod(methodName, methodArguments) {
+        return this.getMethod(methodName, methodArguments).call({ from: this.from });
     }
 
     /**
      * Send transaction to the contract an run an method
      * @param {string} methodName 
-     * @param {array} contractArguments 
+     * @param {array} methodArguments 
      * @return \Provide
      */
-    sendTransaction(methodName, contractArguments) {
-        return this.getMethod(methodName, contractArguments).send({ from: this.from });
+    sendTransaction(methodName, methodArguments) {
+        return this.getMethod(methodName, methodArguments).send({ from: this.from });
     }
 
     /**
      * 
      * @param {string} methodName 
-     * @param {array} contractArguments 
+     * @param {array} methodArguments 
      * @return \Provide
      */
-    encodeAbi(methodName, contractArguments) {
-        return this.getMethod(methodName, contractArguments).encodeAbi();
+    encodeAbi(methodName, methodArguments) {
+        return this.getMethod(methodName, methodArguments).encodeAbi();
     }
 
     /**
@@ -184,13 +184,13 @@ class ContractAdapter {
      * @param {number} gasPrice 
      * @param {number} gas 
      * @param {string} data 
-     * @param {array} contractArguments
+     * @param {array} methodArguments
      * @return \Provide
      */
-    deploy(gasPrice, gas, data, contractArguments) {
+    deploy(gasPrice, gas, data, methodArguments) {
         return this.contract.deploy({
             data: data,
-            arguments: contractArguments
+            arguments: methodArguments
         }).send({
             from: this.from,
             gas: gas,
@@ -237,9 +237,6 @@ class ContractAdapter {
         return this.contract.getPastEvents(eventName, options);
     }
 
-    getAvaibleEvents() {
-        // research
-    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = ContractAdapter;
 
@@ -249,11 +246,123 @@ class ContractAdapter {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_ContractAdapter__ = __webpack_require__(0);
+
+
+class Congress extends __WEBPACK_IMPORTED_MODULE_0__web3_ContractAdapter__["a" /* default */] {
+
+    /**
+     * @param {Object} web3Connection 
+     */
+    constructor(web3Connection) {
+        super(web3Connection.web3, web3Connection.abi, web3Connection.address, web3Connection.gasPrice = undefined, web3Connection.from = undefined);
+    }
+
+    /**
+     * @param {number} proposal 
+     * @param {number} choice 
+     */
+    vote(proposal, choice) {
+        return this.contract.sendTransaction('vote', [proposal, choice]);
+    }
+
+    /**
+     * @param {string} name 
+     * @param {*} payload 
+     */
+    propose(name, payload) {
+        return this.contract.sendTransaction('propose', [name, payload]);
+    }
+
+    /**
+     * @param {Object} proposalFactory 
+     * @param {*} payload 
+     */
+    createProposal(proposalFactory, payload) {
+        return this.contract.sendTransaction('createProposal', []);
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Congress;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+class ContractConnectionModel {
+
+    /**
+     * @param {Object} web3 
+     * @param {array} abi 
+     * @param {string} address 
+     * @param {number} gasPrice 
+     * @param {string} from 
+     */
+    constructor(web3, abi, address, gasPrice = undefined, from = undefined) {
+        this.web3 = web3;
+        this.abi = abi;
+        this.address = address;
+        this.gasPrice = gasPrice;
+        this.from = from;
+    }
+
+    /**
+     * @return {Object}
+     */
+    getWeb3() {
+        return this.web3;
+    }
+
+    /**
+     * @return {array}
+     */
+    getAbi() {
+        return this.abi;
+    }
+
+    /**
+     * @return {string}
+     */
+    getAddress() {
+        return this.address;
+    }
+
+    /**
+     * @return {number}
+     */
+    getGasPrice() {
+        return this.gasPrice;
+    }
+
+    /**
+     * @return {string}
+     */
+    getFrom() {
+        return this.from;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = ContractConnectionModel;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ContractAdapter__ = __webpack_require__(0);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ContractAdapter", function() { return __WEBPACK_IMPORTED_MODULE_0_ContractAdapter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_ContractAdapter__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_models_ContractConnectionModel__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_Congress__ = __webpack_require__(1);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ContractConnectionModel", function() { return __WEBPACK_IMPORTED_MODULE_1__api_models_ContractConnectionModel__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Congress", function() { return __WEBPACK_IMPORTED_MODULE_2__api_Congress__["a"]; });
 
 
+
+
+
+//Export public modules
 
 
 /***/ })

@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = {
     entry: __dirname + '/lib/harbour.js',
     output: {
@@ -15,9 +17,6 @@ module.exports = {
         }]
     },
     resolve: {
-        alias: { 
-            ContractAdapter: './web3/ContractAdapter.js'
-        },
         extensions: ['.js', '.es6']
     }
 };
