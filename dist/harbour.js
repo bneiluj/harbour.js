@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -343,18 +343,285 @@ class Congress extends __WEBPACK_IMPORTED_MODULE_0__web3_Contract__["a" /* defau
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+class Address {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.web3 = web3;
+        this.utils = this.web3.utils;
+    }
+
+    /**
+     * @param {string} address 
+     * @return {bool}
+     */
+    isAddress(address) {
+        return this.utils.isAddress(address);
+    }
+
+    /**
+     * @param {string} address
+     * @return {string} 
+     */
+    toChecksumAddress(address) {
+        return this.utils.toChecksumAddress(address);
+    }
+
+    /**
+     * @param {bool} addressChecksum 
+     * @return {bool}
+     */
+    checkAddressChecksum(addressChecksum) {
+        return this.utils.checkAddressChecksum(addressChecksum);
+    }
+}
+/* unused harmony export default */
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Hex {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.utils = web3.utils;
+    }
+
+    /**
+     * @param {Object | number | string} value 
+     * @return {string}
+     */
+    toHex(value) {
+        return this.utils.toHex(value);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {string}
+     */
+    hexToNumberString(hex) {
+        return this.utils.hexToNumberString(hex);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {number}
+     */
+    hexToNumber(hex) {
+        return this.utils.hexToNumber(hex);
+    }
+
+    /**
+     * @param {Object | number | string} hex 
+     * @return {string}
+     */
+    numberToHex(value) {
+        return this.utils.numberToHex(value);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {string}
+     */
+    hexToUtf8(hex) {
+        return this.utils.hexToUtf8(hex);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {string}
+     */
+    hexToAscii(hex) {
+        return this.utils.hexToAscii(hex);
+    }
+
+    /**
+     * @param {string} string 
+     * @return {string}
+     */
+    utf8ToHex(string) {
+        return this.utils.utf8ToHex(string);
+    }
+
+    /**
+     * @param {string} string 
+     * @return {string}
+     */
+    asciiToHex(string) {
+        return this.utils.asciiToHex(string);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {array}
+     */
+    hexToBytes(hex) {
+        return this.utils.hexToBytes(hex);
+    }
+
+    /**
+     * @param {array} array 
+     * @return {string}
+     */
+    bytesToHex(array) {
+        return this.utils.bytesToHex(array);
+    }
+
+    /**
+     * @param {number} bytes 
+     * @return {string}
+     */
+    randomHex(bytes) {
+        return this.utils.randomHex(bytes);
+    }
+}
+/* unused harmony export default */
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Number {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.web3 = web3;
+        this.utils = this.web3.utils;
+        this.bigNummber = this.web3.utils.BN;
+    }
+
+    /**
+     * @param {number} number 
+     * @return {string}
+     */
+    toString(number) {
+        return new this.bigNummber(number).toString();
+    }
+
+    /**
+     * @param {number} number
+     * @param {number} numberToAdd
+     * @return {string}
+     */
+    add(number, numberToAdd) {
+        return new this.bigNummber(number).add(new BN(numberToAdd)).toString();
+    }
+
+    /**
+     * @param {Object} number
+     * @return {bool}
+     */
+    isBigNumber(number) {
+        return this.utils.isBigNumber(number);
+    }
+
+    /**
+     * @param {*} number 
+     * @param {bool} raw 
+     * @return {Object}
+     */
+    toBigNumber(number, raw = undefined) {
+        let bigNummber = this.utils.toBN(number);
+        if (raw) {
+            return bigNummber;
+        }
+
+        let clone = Object.assign({}, this);
+        clone.bigNummber = bigNummber;
+
+        return clone;
+    }
+
+    /**
+     * @param {number} number 
+     * @param {string} unit 
+     */
+    toWei(number, unit) {
+        return this.utils.toWei(number, unit);
+    }
+
+    /**
+     * @param {number} number 
+     * @param {string} unit 
+     */
+    fromWei(number, unit) {
+        return this.utils.fromWei(number, unit);
+    }
+}
+/* unused harmony export default */
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Sha {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.utils = web3.utils;
+    }
+
+    /**
+     * @param {string} string 
+     */
+    sha3(string) {
+        return this.utils.sha3(string);
+    }
+
+    /**
+     * @param {*} any 
+     */
+    soliditySha3(any) {
+        return this.utils.soliditySha3(any);
+    }
+}
+/* unused harmony export default */
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Utils", function() { return Utils; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web3_models_ConnectionModel__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_Congress__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__web3_utils_Address__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__web3_utils_Hex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__web3_utils_Number__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web3_utils_Sha__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_Congress__ = __webpack_require__(2);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionModel", function() { return __WEBPACK_IMPORTED_MODULE_1__web3_models_ConnectionModel__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Congress", function() { return __WEBPACK_IMPORTED_MODULE_2__api_Congress__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Congress", function() { return __WEBPACK_IMPORTED_MODULE_6__api_Congress__["a"]; });
+
+// Web3
 
 
 
 
 
-//Export public modules
+
+
+// Harbour
+
+
+// Export public modules
 
 
 /***/ })
