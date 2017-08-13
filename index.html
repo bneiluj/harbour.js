@@ -13,11 +13,37 @@
        <script defer>       
             var web3 = new Web3();
             web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
-            var abi = [{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"proposals","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_address","type":"address"}],"name":"isOwner","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"configuration","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"proposal","type":"uint256"},{"name":"inFavour","type":"bool"}],"name":"vote","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"payload","type":"bytes"}],"name":"propose","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"type":"function"},{"inputs":[{"name":"_configuration","type":"address"},{"name":"_proposals","type":"address"},{"name":"_rights","type":"address"},{"name":"_strategy","type":"address"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"id","type":"uint256"},{"indexed":false,"name":"name","type":"string"},{"indexed":true,"name":"creator","type":"address"}],"name":"ProposalCreated","type":"event"}];
-            var address = '0x1d131e81144d697185904328f4ac5045ac8fa187';
-            var connectionModel = new Harbour.ConnectionModel(web3, abi, address, '0x8DD438ca0EAFA227737f21474737f48c8e511AD5');
-            var contract = new Harbour.Congress(connectionModel);
-            contract.vote('123', 123).on('receipt', function(receipt){
+            var account = '0xf289100C664FD3cb75581b1b59e92974884aC766';
+
+            var votingRightBytecode = '6060604052341561000f57600080fd5b604051610309380380610309833981016040528080518201919050505b60008090505b81518110156100b7576001600080848481518110151561004e57fe5b9060200190602002015173ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055505b8080600101915050610032565b5b50505b61023f806100ca6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806342b4632e14610054578063adfaa72e146100a5578063d936547e146100f6575b600080fd5b341561005f57600080fd5b61008b600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610147565b604051808215151515815260200191505060405180910390f35b34156100b057600080fd5b6100dc600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061019d565b604051808215151515815260200191505060405180910390f35b341561010157600080fd5b61012d600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506101f3565b604051808215151515815260200191505060405180910390f35b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff1690505b919050565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff1690505b919050565b60006020528060005260406000206000915054906101000a900460ff16815600a165627a7a7230582036f0e31d90b2fc298f39fe2eab3ca27df22f723c2245c58cdc01f8e1c255d3420029';
+            var votingRightABI = [{"constant":true,"inputs":[{"name":"proposer","type":"address"}],"name":"canPropose","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"voter","type":"address"}],"name":"canVote","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"}];
+            var votingRightConnectionModel = new Harbour.ConnectionModel(web3, votingRightABI, '', account);
+            var votingRight = new Harbour.Contract(votingRightConnectionModel);
+            var votingRightAddress;
+            votingRight.deploy(votingRightBytecode, ['0xf289100C664FD3cb75581b1b59e92974884aC766']).on('receipt', function(receipt){
+                votingRightAddress = receipt.contractAddress;
+                console.log(votingRightAddress);
+            }).on('error', function(error) {
+                console.log(error);
+            });
+
+            var votingStrategyBytecode = '6060604052341561000f57600080fd5b5b6101678061001f6000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680637eae191114610054578063d4a8dd981461008f578063faeae2f1146100ca575b600080fd5b341561005f57600080fd5b6100756004808035906020019091905050610117565b604051808215151515815260200191505060405180910390f35b341561009a57600080fd5b6100b06004808035906020019091905050610123565b604051808215151515815260200191505060405180910390f35b34156100d557600080fd5b610101600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061012f565b6040518082815260200191505060405180910390f35b6000600190505b919050565b6000600190505b919050565b6000600190505b9190505600a165627a7a72305820954d6bcac9e5e41ba3306c2c2125dad921a981b06827e08f8712fab45bad20a80029'; 
+            var votingStrategyABI = [{"constant":true,"inputs":[{"name":"proposal","type":"uint256"}],"name":"proposalPassed","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"proposal","type":"uint256"}],"name":"quorumReached","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"voter","type":"address"}],"name":"votingWeightOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
+            var votingsStrategyConnectionModel = new Harbour.ConnectionModel(web3, votingStrategyABI, '', account);
+            var votingStrategy = new Harbour.Contract(votingsStrategyConnectionModel);
+            var votingStrategyAddress;
+            votingStrategy.deploy(votingStrategyBytecode, ['0xf289100C664FD3cb75581b1b59e92974884aC766']).on('receipt', function(receipt){
+                votingStrategyAddress = receipt.contractAddress;
+            }).on('error', function(error) {
+                console.log(error);
+            });
+
+            var versionABI = [{"constant": false,"inputs": [{"name": "votingRights","type": "address"},{"name": "votingStrategy","type": "address"}],"name": "createCongress","outputs": [{"name": "","type": "uint256"}],"payable": false,"type": "function"},{"constant": false,"inputs": [{"name": "id","type": "uint256"}],"name": "getCongress","outputs": [{"name": "","type": "address"}],"payable": false,"type": "function"},{"constant": true,"inputs": [],"name": "lastId","outputs": [{"name": "","type": "uint256"}],"payable": false,"type": "function"},{"constant": false,"inputs": [{"name": "id","type": "uint256"}],"name": "destroyCongress","outputs": [],"payable": false,"type": "function"},{"anonymous": false,"inputs": [{"indexed": false,"name": "id","type": "uint256"},{"indexed": false,"name": "congress","type": "address"}],"name": "CongressCreated","type": "event"}];
+            var versionAddress = '0x0027e796c509f272ffa24f2cbbdacf23a8a75282';
+            var versionConnectionModel = new Harbour.ConnectionModel(web3, versionABI, versionAddress, account);
+            var version = new Harbour.Version(versionConnectionModel);
+
+            version.createCongress(votingRightAddress, votingStrategyAddress).on('receipt', function(receipt){
                 console.log(receipt);
             }).on('error', function(error) {
                 console.log(error);
