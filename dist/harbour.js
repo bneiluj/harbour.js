@@ -73,113 +73,661 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/* exports provided: default */
-/* exports used: default */
-/*!******************************!*\
-  !*** ./lib/web3/Contract.js ***!
-  \******************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_ConnectionModel__ = __webpack_require__(/*! ./models/ConnectionModel */ 4);\n\n\nclass Contract {\n\n    /**\n     * @param {Web3} web3 \n     * @param {array} abi \n     * @param {string} address \n     * @param {number} gasPrice \n     * @param {string} from \n     */\n    constructor(web3Connection) {\n        if (!(web3Connection instanceof __WEBPACK_IMPORTED_MODULE_0__models_ConnectionModel__[\"a\" /* default */])) {\n            throw new Error('Argument web3Connection should be an instance of ConnectionModel');\n        }\n\n        this.from = web3Connection.getFrom();\n        this.abi = web3Connection.getAbi();\n        this.web3 = web3Connection.getWeb3();\n        this.contract = new web3.eth.Contract(this.abi, web3Connection.getAddress());\n        this.address = this.contract._address;\n    }\n\n    /**\n     * Run function from contract\n     * @param {string} methodName \n     * @param {params} methodArguments \n     * @return {Object}\n     */\n    getMethod(methodName, methodArguments) {\n        return this.contract.methods[methodName].apply(this.contract, methodArguments);\n    }\n\n    /**\n    * @return {Object} \n    */\n    getOptions() {\n        return this.contract.options;\n    }\n\n    /**\n     * Get Contract option\n     * @param {string} optionName \n     * @return {Object}\n     */\n    getOption(optionName) {\n        return this.contract.options[optionName];\n    }\n\n    /**\n     * Get estimate gas for method\n     * @param {string} methodName \n     * @param {array} methodArguments \n     * @return {Object}\n     */\n    estimateGas(methodName, methodArguments) {\n        return this.getMethod(methodNamename, methodArguments).estimateGas();\n    }\n\n    /**\n     * Call method on contract\n     * @param {string} methodName \n     * @param {array} methodArguments\n     * @return {Object}\n     */\n    callMethod(methodName, methodArguments) {\n        return this.getMethod(methodName, methodArguments).call();\n    }\n\n    /**\n     * Send transaction to the contract an run an method\n     * @param {string} methodName \n     * @param {array} methodArguments \n     * @return {Object}\n     */\n    sendTransaction(methodName, methodArguments) {\n        return this.getMethod(methodName, methodArguments).send({ from: this.from });\n    }\n\n    /**\n     * \n     * @param {string} methodName \n     * @param {array} methodArguments \n     * @return {Object}\n     */\n    encodeAbi(methodName, methodArguments) {\n        return this.getMethod(methodName, methodArguments).encodeAbi();\n    }\n\n    /**\n     * Clone contract and return new contractAdapter instance\n     * @return {Object}\n     */\n    clone(web3Contract) {\n        let clonedContract = web3Contract.clone();\n        let contractAdapterClone = Object.assign({}, this);\n        contractAdapterClone.contract = clonedContract;\n        contractAdapterClone.address = clonedContract._address;\n        return contractAdapterClone;\n    }\n\n    /**\n     * Deploy new contract on the blockchain\n     * @param {number} gasPrice \n     * @param {number} gas \n     * @param {string} bytecode \n     * @param {array} deployArguments\n     * @return {Object} \n     */\n    deploy(bytecode, deployArguments) {\n        return this.web3.eth.sendTransaction({\n            from: this.from,\n            data: bytecode,\n            gas: 4712388,\n            gasPrice: 100000000000,\n            deployArguments\n        });\n    }\n\n    /**\n     * Listen for event on contract\n     * @param {string} eventName \n     * @param {object} options \n     * @return {Object}\n     */\n    listenForEvent(eventName, options = undefined) {\n        return this.contract.events[eventName](options);\n    }\n\n    /**\n     * Listen only once if an event is fired\n     * @param {string} eventName \n     * @param {object} options \n     * @return {Object}\n     */\n    listenOnceForEvent(eventName, options = undefined) {\n        return this.contract.once(eventName, options);\n    }\n\n    /**\n     * Listen for all events\n     * @param {object} options \n     * @return {Object}\n     */\n    listenForAllEvents(options = undefined) {\n        return this.contract.allEvents(options);\n    }\n\n    /**\n     * Get history of an event\n     * @param {string} eventName \n     * @param {object} options \n     * @return {Object}\n     */\n    getPastEvents(eventName, options) {\n        return this.contract.getPastEvents(eventName, options);\n    }\n}\n/* harmony export (immutable) */ __webpack_exports__[\"a\"] = Contract;\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvd2ViMy9Db250cmFjdC5qcz9hNGI2Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBDb25uZWN0aW9uTW9kZWwgZnJvbSAnLi9tb2RlbHMvQ29ubmVjdGlvbk1vZGVsJztcblxuZXhwb3J0IGRlZmF1bHQgY2xhc3MgQ29udHJhY3Qge1xuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtXZWIzfSB3ZWIzIFxuICAgICAqIEBwYXJhbSB7YXJyYXl9IGFiaSBcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gYWRkcmVzcyBcbiAgICAgKiBAcGFyYW0ge251bWJlcn0gZ2FzUHJpY2UgXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGZyb20gXG4gICAgICovXG4gICAgY29uc3RydWN0b3Iod2ViM0Nvbm5lY3Rpb24pIHtcbiAgICAgICAgaWYgKCEod2ViM0Nvbm5lY3Rpb24gaW5zdGFuY2VvZiBDb25uZWN0aW9uTW9kZWwpKSB7XG4gICAgICAgICAgICB0aHJvdyBuZXcgRXJyb3IoJ0FyZ3VtZW50IHdlYjNDb25uZWN0aW9uIHNob3VsZCBiZSBhbiBpbnN0YW5jZSBvZiBDb25uZWN0aW9uTW9kZWwnKTtcbiAgICAgICAgfVxuICAgICAgICAgICAgXG4gICAgICAgIHRoaXMuZnJvbSA9IHdlYjNDb25uZWN0aW9uLmdldEZyb20oKTtcbiAgICAgICAgdGhpcy5hYmkgPSB3ZWIzQ29ubmVjdGlvbi5nZXRBYmkoKTtcbiAgICAgICAgdGhpcy53ZWIzID0gd2ViM0Nvbm5lY3Rpb24uZ2V0V2ViMygpO1xuICAgICAgICB0aGlzLmNvbnRyYWN0ID0gbmV3IHdlYjMuZXRoLkNvbnRyYWN0KFxuICAgICAgICAgICAgdGhpcy5hYmksXG4gICAgICAgICAgICB3ZWIzQ29ubmVjdGlvbi5nZXRBZGRyZXNzKClcbiAgICAgICAgKTtcbiAgICAgICAgdGhpcy5hZGRyZXNzID0gdGhpcy5jb250cmFjdC5fYWRkcmVzcztcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBSdW4gZnVuY3Rpb24gZnJvbSBjb250cmFjdFxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBtZXRob2ROYW1lIFxuICAgICAqIEBwYXJhbSB7cGFyYW1zfSBtZXRob2RBcmd1bWVudHMgXG4gICAgICogQHJldHVybiB7T2JqZWN0fVxuICAgICAqL1xuICAgIGdldE1ldGhvZChtZXRob2ROYW1lLCAgbWV0aG9kQXJndW1lbnRzKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmNvbnRyYWN0Lm1ldGhvZHNbbWV0aG9kTmFtZV0uYXBwbHkodGhpcy5jb250cmFjdCwgbWV0aG9kQXJndW1lbnRzKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAqIEByZXR1cm4ge09iamVjdH0gXG4gICAgKi9cbiAgICBnZXRPcHRpb25zKCkge1xuICAgICAgICByZXR1cm4gdGhpcy5jb250cmFjdC5vcHRpb25zXG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogR2V0IENvbnRyYWN0IG9wdGlvblxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBvcHRpb25OYW1lIFxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBnZXRPcHRpb24ob3B0aW9uTmFtZSkge1xuICAgICAgICByZXR1cm4gdGhpcy5jb250cmFjdC5vcHRpb25zW29wdGlvbk5hbWVdXG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogR2V0IGVzdGltYXRlIGdhcyBmb3IgbWV0aG9kXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IG1ldGhvZE5hbWUgXG4gICAgICogQHBhcmFtIHthcnJheX0gbWV0aG9kQXJndW1lbnRzIFxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBlc3RpbWF0ZUdhcyhtZXRob2ROYW1lLCBtZXRob2RBcmd1bWVudHMpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0TWV0aG9kKG1ldGhvZE5hbWVuYW1lLCBtZXRob2RBcmd1bWVudHMpLmVzdGltYXRlR2FzKCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQ2FsbCBtZXRob2Qgb24gY29udHJhY3RcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gbWV0aG9kTmFtZSBcbiAgICAgKiBAcGFyYW0ge2FycmF5fSBtZXRob2RBcmd1bWVudHNcbiAgICAgKiBAcmV0dXJuIHtPYmplY3R9XG4gICAgICovXG4gICAgY2FsbE1ldGhvZChtZXRob2ROYW1lLCBtZXRob2RBcmd1bWVudHMpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0TWV0aG9kKG1ldGhvZE5hbWUsIG1ldGhvZEFyZ3VtZW50cykuY2FsbCgpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIFNlbmQgdHJhbnNhY3Rpb24gdG8gdGhlIGNvbnRyYWN0IGFuIHJ1biBhbiBtZXRob2RcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gbWV0aG9kTmFtZSBcbiAgICAgKiBAcGFyYW0ge2FycmF5fSBtZXRob2RBcmd1bWVudHMgXG4gICAgICogQHJldHVybiB7T2JqZWN0fVxuICAgICAqL1xuICAgIHNlbmRUcmFuc2FjdGlvbihtZXRob2ROYW1lLCBtZXRob2RBcmd1bWVudHMpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0TWV0aG9kKG1ldGhvZE5hbWUsIG1ldGhvZEFyZ3VtZW50cykuc2VuZCh7ZnJvbTogdGhpcy5mcm9tfSk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IG1ldGhvZE5hbWUgXG4gICAgICogQHBhcmFtIHthcnJheX0gbWV0aG9kQXJndW1lbnRzIFxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBlbmNvZGVBYmkobWV0aG9kTmFtZSwgbWV0aG9kQXJndW1lbnRzKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmdldE1ldGhvZChtZXRob2ROYW1lLCBtZXRob2RBcmd1bWVudHMpLmVuY29kZUFiaSgpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIENsb25lIGNvbnRyYWN0IGFuZCByZXR1cm4gbmV3IGNvbnRyYWN0QWRhcHRlciBpbnN0YW5jZVxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBjbG9uZSh3ZWIzQ29udHJhY3QpIHtcbiAgICAgICAgbGV0IGNsb25lZENvbnRyYWN0ID0gd2ViM0NvbnRyYWN0LmNsb25lKCk7XG4gICAgICAgIGxldCBjb250cmFjdEFkYXB0ZXJDbG9uZSA9IE9iamVjdC5hc3NpZ24oe30sIHRoaXMpO1xuICAgICAgICBjb250cmFjdEFkYXB0ZXJDbG9uZS5jb250cmFjdCA9IGNsb25lZENvbnRyYWN0O1xuICAgICAgICBjb250cmFjdEFkYXB0ZXJDbG9uZS5hZGRyZXNzID0gY2xvbmVkQ29udHJhY3QuX2FkZHJlc3M7XG4gICAgICAgIHJldHVybiBjb250cmFjdEFkYXB0ZXJDbG9uZTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBEZXBsb3kgbmV3IGNvbnRyYWN0IG9uIHRoZSBibG9ja2NoYWluXG4gICAgICogQHBhcmFtIHtudW1iZXJ9IGdhc1ByaWNlIFxuICAgICAqIEBwYXJhbSB7bnVtYmVyfSBnYXMgXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGJ5dGVjb2RlIFxuICAgICAqIEBwYXJhbSB7YXJyYXl9IGRlcGxveUFyZ3VtZW50c1xuICAgICAqIEByZXR1cm4ge09iamVjdH0gXG4gICAgICovXG4gICAgZGVwbG95KGJ5dGVjb2RlLCBkZXBsb3lBcmd1bWVudHMpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMud2ViMy5ldGguc2VuZFRyYW5zYWN0aW9uKHtcbiAgICAgICAgICAgIGZyb206IHRoaXMuZnJvbSxcbiAgICAgICAgICAgIGRhdGE6IGJ5dGVjb2RlLFxuICAgICAgICAgICAgZ2FzOiA0NzEyMzg4LFxuICAgICAgICAgICAgZ2FzUHJpY2U6IDEwMDAwMDAwMDAwMCxcbiAgICAgICAgICAgIGRlcGxveUFyZ3VtZW50c1xuICAgICAgICB9KTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBMaXN0ZW4gZm9yIGV2ZW50IG9uIGNvbnRyYWN0XG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGV2ZW50TmFtZSBcbiAgICAgKiBAcGFyYW0ge29iamVjdH0gb3B0aW9ucyBcbiAgICAgKiBAcmV0dXJuIHtPYmplY3R9XG4gICAgICovXG4gICAgbGlzdGVuRm9yRXZlbnQoZXZlbnROYW1lLCBvcHRpb25zID0gdW5kZWZpbmVkKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmNvbnRyYWN0LmV2ZW50c1tldmVudE5hbWVdKG9wdGlvbnMpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIExpc3RlbiBvbmx5IG9uY2UgaWYgYW4gZXZlbnQgaXMgZmlyZWRcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gZXZlbnROYW1lIFxuICAgICAqIEBwYXJhbSB7b2JqZWN0fSBvcHRpb25zIFxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBsaXN0ZW5PbmNlRm9yRXZlbnQoZXZlbnROYW1lLCBvcHRpb25zID0gdW5kZWZpbmVkKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmNvbnRyYWN0Lm9uY2UoZXZlbnROYW1lLG9wdGlvbnMpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIExpc3RlbiBmb3IgYWxsIGV2ZW50c1xuICAgICAqIEBwYXJhbSB7b2JqZWN0fSBvcHRpb25zIFxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBsaXN0ZW5Gb3JBbGxFdmVudHMob3B0aW9ucyA9IHVuZGVmaW5lZCkge1xuICAgICAgICByZXR1cm4gdGhpcy5jb250cmFjdC5hbGxFdmVudHMob3B0aW9ucyk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogR2V0IGhpc3Rvcnkgb2YgYW4gZXZlbnRcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gZXZlbnROYW1lIFxuICAgICAqIEBwYXJhbSB7b2JqZWN0fSBvcHRpb25zIFxuICAgICAqIEByZXR1cm4ge09iamVjdH1cbiAgICAgKi9cbiAgICBnZXRQYXN0RXZlbnRzKGV2ZW50TmFtZSwgb3B0aW9ucykge1xuICAgICAgICByZXR1cm4gdGhpcy5jb250cmFjdC5nZXRQYXN0RXZlbnRzKGV2ZW50TmFtZSxvcHRpb25zKTtcbiAgICB9XG59XG5cblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gbGliL3dlYjMvQ29udHJhY3QuanMiXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7Ozs7OztBQU9BO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUlBO0FBQ0E7QUFDQTtBQUNBOzs7Ozs7QUFNQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7QUFHQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7OztBQUtBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7OztBQU1BO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7OztBQU1BO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7OztBQU1BO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7OztBQU1BO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7Ozs7O0FBUUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFMQTtBQU9BO0FBQ0E7QUFDQTs7Ozs7O0FBTUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7Ozs7O0FBTUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7Ozs7QUFLQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7Ozs7QUFNQTtBQUNBO0FBQ0E7QUE3SkE7OyIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///0\n");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_ConnectionModel__ = __webpack_require__(1);
+
+
+class Contract {
+
+    /**
+     * @param {Web3} web3 
+     * @param {array} abi 
+     * @param {string} address 
+     * @param {number} gasPrice 
+     * @param {string} from 
+     */
+    constructor(web3Connection) {
+        if (!(web3Connection instanceof __WEBPACK_IMPORTED_MODULE_0__models_ConnectionModel__["a" /* default */])) {
+            throw new Error('Argument web3Connection should be an instance of ConnectionModel');
+        }
+
+        this.from = web3Connection.getFrom();
+        this.abi = web3Connection.getAbi();
+        this.web3 = web3Connection.getWeb3();
+        this.contract = new web3.eth.Contract(this.abi, web3Connection.getAddress());
+        this.address = this.contract._address;
+    }
+
+    /**
+     * Run function from contract
+     * @param {string} methodName 
+     * @param {params} methodArguments 
+     * @return {Object}
+     */
+    getMethod(methodName, methodArguments) {
+        return this.contract.methods[methodName].apply(this.contract, methodArguments);
+    }
+
+    /**
+    * @return {Object} 
+    */
+    getOptions() {
+        return this.contract.options;
+    }
+
+    /**
+     * Get Contract option
+     * @param {string} optionName 
+     * @return {Object}
+     */
+    getOption(optionName) {
+        return this.contract.options[optionName];
+    }
+
+    /**
+     * Get estimate gas for method
+     * @param {string} methodName 
+     * @param {array} methodArguments 
+     * @return {Object}
+     */
+    estimateGas(methodName, methodArguments) {
+        return this.getMethod(methodNamename, methodArguments).estimateGas();
+    }
+
+    /**
+     * Call method on contract
+     * @param {string} methodName 
+     * @param {array} methodArguments
+     * @return {Object}
+     */
+    callMethod(methodName, methodArguments) {
+        return this.getMethod(methodName, methodArguments).call();
+    }
+
+    /**
+     * Send transaction to the contract an run an method
+     * @param {string} methodName 
+     * @param {array} methodArguments 
+     * @return {Object}
+     */
+    sendTransaction(methodName, methodArguments) {
+        return this.getMethod(methodName, methodArguments).send({
+            from: this.from,
+            gas: 4700000,
+            gasPrice: 1000000
+        });
+    }
+
+    /**
+     * 
+     * @param {string} methodName 
+     * @param {array} methodArguments 
+     * @return {Object}
+     */
+    encodeAbi(methodName, methodArguments) {
+        return this.getMethod(methodName, methodArguments).encodeAbi();
+    }
+
+    /**
+     * Clone contract and return new contractAdapter instance
+     * @return {Object}
+     */
+    clone(web3Contract) {
+        let clonedContract = web3Contract.clone();
+        let contractAdapterClone = Object.assign({}, this);
+        contractAdapterClone.contract = clonedContract;
+        contractAdapterClone.address = clonedContract._address;
+        return contractAdapterClone;
+    }
+
+    /**
+     * Deploy new contract on the blockchain
+     * @param {number} gasPrice 
+     * @param {number} gas 
+     * @param {string} bytecode 
+     * @param {array} deployArguments
+     * @return {Object} 
+     */
+    deploy(bytecode, deployArguments) {
+        return this.contract.deploy({ data: bytecode, arguments: deployArguments }).send({
+            from: this.from
+        });
+    }
+
+    /**
+     * Listen for event on contract
+     * @param {string} eventName 
+     * @param {object} options 
+     * @return {Object}
+     */
+    listenForEvent(eventName, options = undefined) {
+        return this.contract.events[eventName](options);
+    }
+
+    /**
+     * Listen only once if an event is fired
+     * @param {string} eventName 
+     * @param {object} options 
+     * @return {Object}
+     */
+    listenOnceForEvent(eventName, options = undefined) {
+        return this.contract.once(eventName, options);
+    }
+
+    /**
+     * Listen for all events
+     * @param {object} options 
+     * @return {Object}
+     */
+    listenForAllEvents(options = undefined) {
+        return this.contract.allEvents(options);
+    }
+
+    /**
+     * Get history of an event
+     * @param {string} eventName 
+     * @param {object} options 
+     * @return {Object}
+     */
+    getPastEvents(eventName, options) {
+        return this.contract.getPastEvents(eventName, options);
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Contract;
+
 
 /***/ }),
-/* 1 */,
-/* 2 */
-/* exports provided: default */
-/* exports used: default */
-/*!*****************************!*\
-  !*** ./lib/api/Congress.js ***!
-  \*****************************/
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(/*! ../web3/Contract */ 0);\n\n\nclass Congress extends __WEBPACK_IMPORTED_MODULE_0__web3_Contract__[\"a\" /* default */] {\n\n    /**\n     * @param {number} proposal \n     * @param {number} choice \n     * @return {Promise}\n     */\n    vote(proposal, choice) {\n        return this.sendTransaction('vote', [proposal, choice]);\n    }\n\n    /**\n     * @param {string} name  \n     * @param {*} payload \n     * @return {Promise}\n     */\n    propose(name, payload) {\n        return this.sendTransaction('propose', [name, payload]);\n    }\n\n    /**\n     * @param {number} proposalFactory \n     * @param {*} payload \n     * @return {Promise}\n     */\n    createProposal(proposalFactory, payload) {\n        return this.sendTransaction('createProposal', [proposalFactory, payload]);\n    }\n\n}\n/* harmony export (immutable) */ __webpack_exports__[\"a\"] = Congress;\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMi5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvYXBpL0NvbmdyZXNzLmpzP2E4NGQiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IENvbnRyYWN0IGZyb20gJy4uL3dlYjMvQ29udHJhY3QnO1xuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBDb25ncmVzcyBleHRlbmRzIENvbnRyYWN0IHtcblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSB7bnVtYmVyfSBwcm9wb3NhbCBcbiAgICAgKiBAcGFyYW0ge251bWJlcn0gY2hvaWNlIFxuICAgICAqIEByZXR1cm4ge1Byb21pc2V9XG4gICAgICovXG4gICAgdm90ZShwcm9wb3NhbCwgY2hvaWNlKSB7XG4gICAgICAgIHJldHVybiB0aGlzLnNlbmRUcmFuc2FjdGlvbigndm90ZScsIFtwcm9wb3NhbCwgY2hvaWNlXSk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IG5hbWUgIFxuICAgICAqIEBwYXJhbSB7Kn0gcGF5bG9hZCBcbiAgICAgKiBAcmV0dXJuIHtQcm9taXNlfVxuICAgICAqL1xuICAgIHByb3Bvc2UobmFtZSwgcGF5bG9hZCkge1xuICAgICAgICByZXR1cm4gdGhpcy5zZW5kVHJhbnNhY3Rpb24oJ3Byb3Bvc2UnLCBbbmFtZSwgcGF5bG9hZF0pO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSB7bnVtYmVyfSBwcm9wb3NhbEZhY3RvcnkgXG4gICAgICogQHBhcmFtIHsqfSBwYXlsb2FkIFxuICAgICAqIEByZXR1cm4ge1Byb21pc2V9XG4gICAgICovXG4gICAgY3JlYXRlUHJvcG9zYWwocHJvcG9zYWxGYWN0b3J5LCBwYXlsb2FkKSB7XG4gICAgICAgIHJldHVybiB0aGlzLnNlbmRUcmFuc2FjdGlvbignY3JlYXRlUHJvcG9zYWwnLCBbcHJvcG9zYWxGYWN0b3J5LCBwYXlsb2FkXSk7XG4gICAgfVxuXG59XG5cblxuLy8gV0VCUEFDSyBGT09URVIgLy9cbi8vIGxpYi9hcGkvQ29uZ3Jlc3MuanMiXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7Ozs7QUFLQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7OztBQUtBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7O0FBS0E7QUFDQTtBQUNBO0FBQ0E7QUE1QkE7OyIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///2\n");
+
+class ConnectionModel {
+
+    /**
+     * @param {Object} web3 
+     * @param {array} abi 
+     * @param {string} address 
+     * @param {number} gasPrice 
+     * @param {string} from 
+     */
+    constructor(web3, abi, address, from) {
+        this.web3 = web3;
+        this.abi = abi;
+        this.address = address;
+        this.from = from;
+    }
+
+    /**
+     * @return {Object}
+     */
+    getWeb3() {
+        return this.web3;
+    }
+
+    /**
+     * @return {array}
+     */
+    getAbi() {
+        return this.abi;
+    }
+
+    /**
+     * @return {string}
+     */
+    getAddress() {
+        return this.address;
+    }
+
+    /**
+     * @return {string}
+     */
+    getFrom() {
+        return this.from;
+    }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = ConnectionModel;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(0);
+
+
+class Congress extends __WEBPACK_IMPORTED_MODULE_0__web3_Contract__["a" /* default */] {
+
+    /**
+     * @param {number} proposal 
+     * @param {number} choice 
+     * @return {Promise}
+     */
+    vote(proposal, choice) {
+        return this.sendTransaction('vote', [proposal, choice]);
+    }
+
+    /**
+     * @param {string} name  
+     * @param {*} payload 
+     * @return {Promise}
+     */
+    propose(name, payload) {
+        return this.sendTransaction('propose', [name, payload]);
+    }
+
+    /**
+     * @param {number} proposalFactory 
+     * @param {*} payload 
+     * @return {Promise}
+     */
+    createProposal(proposalFactory, payload) {
+        return this.sendTransaction('createProposal', [proposalFactory, payload]);
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Congress;
+
 
 /***/ }),
 /* 3 */
-/* exports provided: Contract, ConnectionModel, Congress, Version, Utils */
-/* all exports used */
-/*!************************!*\
-  !*** ./lib/harbour.js ***!
-  \************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("Object.defineProperty(__webpack_exports__, \"__esModule\", { value: true });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"Utils\", function() { return Utils; });\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(/*! ./web3/Contract */ 0);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web3_models_ConnectionModel__ = __webpack_require__(/*! ./web3/models/ConnectionModel */ 4);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__web3_utils_Address__ = __webpack_require__(/*! ./web3/utils/Address */ 5);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__web3_utils_Hex__ = __webpack_require__(/*! ./web3/utils/Hex */ 6);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__web3_utils_Number__ = __webpack_require__(/*! ./web3/utils/Number */ 7);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web3_utils_Sha__ = __webpack_require__(/*! ./web3/utils/Sha */ 8);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__api_Congress__ = __webpack_require__(/*! ./api/Congress */ 2);\n/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api_Version__ = __webpack_require__(/*! ./api/Version */ 9);\n/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, \"Contract\", function() { return __WEBPACK_IMPORTED_MODULE_0__web3_Contract__[\"a\"]; });\n/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, \"ConnectionModel\", function() { return __WEBPACK_IMPORTED_MODULE_1__web3_models_ConnectionModel__[\"a\"]; });\n/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, \"Congress\", function() { return __WEBPACK_IMPORTED_MODULE_6__api_Congress__[\"a\"]; });\n/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, \"Version\", function() { return __WEBPACK_IMPORTED_MODULE_7__api_Version__[\"a\"]; });\n\n// Web3\n\n\n\n\n\n\n\n// Harbour\n\n\n\n// Export public modules\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMy5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvaGFyYm91ci5qcz9lODAzIl0sInNvdXJjZXNDb250ZW50IjpbIlxuLy8gV2ViM1xuaW1wb3J0IENvbnRyYWN0IGZyb20gJy4vd2ViMy9Db250cmFjdCc7XG5pbXBvcnQgQ29ubmVjdGlvbk1vZGVsIGZyb20gJy4vd2ViMy9tb2RlbHMvQ29ubmVjdGlvbk1vZGVsJztcbmltcG9ydCBBZGRyZXNzIGZyb20gJy4vd2ViMy91dGlscy9BZGRyZXNzJztcbmltcG9ydCBIZXggZnJvbSAnLi93ZWIzL3V0aWxzL0hleCc7XG5pbXBvcnQgTnVtYmVyIGZyb20gJy4vd2ViMy91dGlscy9OdW1iZXInO1xuaW1wb3J0IFNoYSBmcm9tICcuL3dlYjMvdXRpbHMvU2hhJztcblxuLy8gSGFyYm91clxuaW1wb3J0IENvbmdyZXNzIGZyb20gJy4vYXBpL0NvbmdyZXNzJztcbmltcG9ydCBWZXJzaW9uIGZyb20gJy4vYXBpL1ZlcnNpb24nO1xuXG5cbi8vIEV4cG9ydCBwdWJsaWMgbW9kdWxlc1xuZXhwb3J0IHtcbiAgICBDb250cmFjdCxcbiAgICBDb25uZWN0aW9uTW9kZWwsXG4gICAgQ29uZ3Jlc3MsXG4gICAgVmVyc2lvbixcbiAgICBVdGlsc1xufTtcblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gbGliL2hhcmJvdXIuanMiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUVBOyIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///3\n");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(0);
+
+
+class Version extends __WEBPACK_IMPORTED_MODULE_0__web3_Contract__["a" /* default */] {
+
+     /**
+      * @param {string} votingRightsAddress 
+      * @param {string} votingStrategyAddress 
+      * @return {Promise}
+      */
+     createCongress(votingRightsAddress, votingStrategyAddress) {
+          return this.sendTransaction('createCongress', [votingRightsAddress, votingStrategyAddress]);
+     }
+
+     /**
+      * @param {number} contractId 
+      * @return {Promise}
+      */
+     destroyCongress(contractId) {
+          return this.sendTransaction('destroyContract', [contractId]);
+     }
+
+     /**
+      * @param {number} congressId 
+      * @return {Promise}
+      */
+     getCongress(congressId) {
+          return this.callMethod('getCongress', [congressId]);
+     }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Version;
+
 
 /***/ }),
 /* 4 */
-/* exports provided: default */
-/* exports used: default */
-/*!********************************************!*\
-  !*** ./lib/web3/models/ConnectionModel.js ***!
-  \********************************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("\nclass ConnectionModel {\n\n    /**\n     * @param {Object} web3 \n     * @param {array} abi \n     * @param {string} address \n     * @param {number} gasPrice \n     * @param {string} from \n     */\n    constructor(web3, abi, address, from) {\n        this.web3 = web3;\n        this.abi = abi;\n        this.address = address;\n        this.from = from;\n    }\n\n    /**\n     * @return {Object}\n     */\n    getWeb3() {\n        return this.web3;\n    }\n\n    /**\n     * @return {array}\n     */\n    getAbi() {\n        return this.abi;\n    }\n\n    /**\n     * @return {string}\n     */\n    getAddress() {\n        return this.address;\n    }\n\n    /**\n     * @return {string}\n     */\n    getFrom() {\n        return this.from;\n    }\n}\n/* harmony export (immutable) */ __webpack_exports__[\"a\"] = ConnectionModel;\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvd2ViMy9tb2RlbHMvQ29ubmVjdGlvbk1vZGVsLmpzPzhlNDgiXSwic291cmNlc0NvbnRlbnQiOlsiXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBDb25uZWN0aW9uTW9kZWwge1xuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IHdlYjMgXG4gICAgICogQHBhcmFtIHthcnJheX0gYWJpIFxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBhZGRyZXNzIFxuICAgICAqIEBwYXJhbSB7bnVtYmVyfSBnYXNQcmljZSBcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gZnJvbSBcbiAgICAgKi9cbiAgICBjb25zdHJ1Y3Rvcih3ZWIzLCBhYmksIGFkZHJlc3MsIGZyb20pIHtcbiAgICAgICAgdGhpcy53ZWIzID0gd2ViMztcbiAgICAgICAgdGhpcy5hYmkgPSBhYmk7XG4gICAgICAgIHRoaXMuYWRkcmVzcyA9IGFkZHJlc3M7XG4gICAgICAgIHRoaXMuZnJvbSA9IGZyb207XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHJldHVybiB7T2JqZWN0fVxuICAgICAqL1xuICAgIGdldFdlYjMoKSB7XG4gICAgICAgIHJldHVybiB0aGlzLndlYjM7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHJldHVybiB7YXJyYXl9XG4gICAgICovXG4gICAgZ2V0QWJpKCkge1xuICAgICAgICByZXR1cm4gdGhpcy5hYmk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIGdldEFkZHJlc3MoKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmFkZHJlc3M7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIGdldEZyb20oKSB7XG4gICAgICAgIHJldHVybiB0aGlzLmZyb207XG4gICAgfVxufVxuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyBsaWIvd2ViMy9tb2RlbHMvQ29ubmVjdGlvbk1vZGVsLmpzIl0sIm1hcHBpbmdzIjoiO0FBQ0E7QUFDQTtBQUNBOzs7Ozs7O0FBT0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7O0FBR0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7O0FBR0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7O0FBR0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7O0FBR0E7QUFDQTtBQUNBO0FBMUNBOzsiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///4\n");
+class Deploy {
+
+    constructor(web3, from, gas, gasPrice) {
+        this.web3 = web3;
+        this.from = from;
+        this.gas = gas;
+        this.gasPrice = gasPrice;
+    }
+
+    /**
+     * 
+     * @param {*} gas 
+     * @param {*} gasPrice 
+     * @param {*} contractsMap 
+     */
+    deployContracts(contractMap) {
+        let self = this;
+        let contractAddress = [];
+        return new Promise(function (resolve, reject) {
+            let contractAddress = [];
+            contractMap.forEach(function (contract, key) {
+                self.deploy(contract.bytecode, contract.arguments).on('receipt', function (receipt) {
+                    contractAddress[contract.name] = receipt.contractAddress;
+                    if (key == contractMap.length - 1) {
+                        resolve(contractAddress);
+                    }
+                }).on('error', function (error) {
+                    reject(error);
+                });
+            });
+        });
+    }
+
+    /**
+    * Deploy new contract on the blockchain
+    * @param {number} gasPrice 
+    * @param {number} gas 
+    * @param {string} bytecode 
+    * @param {array} deployArguments
+    * @return {Object} 
+    */
+    deploy(bytecode, deployArguments) {
+        return new web3.eth.sendTransaction({
+            from: this.from,
+            data: bytecode,
+            gas: this.gas,
+            gasPrice: this.gasPrice,
+            deployArguments
+        });
+    }
+
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = Deploy;
+
 
 /***/ }),
 /* 5 */
-/* exports provided: default */
-/*!***********************************!*\
-  !*** ./lib/web3/utils/Address.js ***!
-  \***********************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("class Address {\n\n    /**\n     * @param {Object} web3 \n     */\n    constructor(web3) {\n        this.web3 = web3;\n        this.utils = this.web3.utils;\n    }\n\n    /**\n     * @param {string} address \n     * @return {bool}\n     */\n    isAddress(address) {\n        return this.utils.isAddress(address);\n    }\n\n    /**\n     * @param {string} address\n     * @return {string} \n     */\n    toChecksumAddress(address) {\n        return this.utils.toChecksumAddress(address);\n    }\n\n    /**\n     * @param {bool} addressChecksum \n     * @return {bool}\n     */\n    checkAddressChecksum(addressChecksum) {\n        return this.utils.checkAddressChecksum(addressChecksum);\n    }\n}\n/* unused harmony export default */\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvd2ViMy91dGlscy9BZGRyZXNzLmpzPzM4MmEiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgY2xhc3MgQWRkcmVzcyB7XG5cbiAgICAvKipcbiAgICAgKiBAcGFyYW0ge09iamVjdH0gd2ViMyBcbiAgICAgKi9cbiAgICBjb25zdHJ1Y3Rvcih3ZWIzKSB7XG4gICAgICAgIHRoaXMud2ViMyA9IHdlYjM7XG4gICAgICAgIHRoaXMudXRpbHMgPSB0aGlzLndlYjMudXRpbHM7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGFkZHJlc3MgXG4gICAgICogQHJldHVybiB7Ym9vbH1cbiAgICAgKi9cbiAgICBpc0FkZHJlc3MoYWRkcmVzcykge1xuICAgICAgICByZXR1cm4gdGhpcy51dGlscy5pc0FkZHJlc3MoYWRkcmVzcyk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGFkZHJlc3NcbiAgICAgKiBAcmV0dXJuIHtzdHJpbmd9IFxuICAgICAqL1xuICAgIHRvQ2hlY2tzdW1BZGRyZXNzKGFkZHJlc3MpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMudG9DaGVja3N1bUFkZHJlc3MoYWRkcmVzcyk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtib29sfSBhZGRyZXNzQ2hlY2tzdW0gXG4gICAgICogQHJldHVybiB7Ym9vbH1cbiAgICAgKi9cbiAgICBjaGVja0FkZHJlc3NDaGVja3N1bShhZGRyZXNzQ2hlY2tzdW0pIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMuY2hlY2tBZGRyZXNzQ2hlY2tzdW0oYWRkcmVzc0NoZWNrc3VtKTtcbiAgICB9XG59XG5cblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gbGliL3dlYjMvdXRpbHMvQWRkcmVzcy5qcyJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBOzs7QUFHQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FBSUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQUlBO0FBQ0E7QUFDQTtBQWhDQTs7Iiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///5\n");
+class Address {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.web3 = web3;
+        this.utils = this.web3.utils;
+    }
+
+    /**
+     * @param {string} address 
+     * @return {bool}
+     */
+    isAddress(address) {
+        return this.utils.isAddress(address);
+    }
+
+    /**
+     * @param {string} address
+     * @return {string} 
+     */
+    toChecksumAddress(address) {
+        return this.utils.toChecksumAddress(address);
+    }
+
+    /**
+     * @param {bool} addressChecksum 
+     * @return {bool}
+     */
+    checkAddressChecksum(addressChecksum) {
+        return this.utils.checkAddressChecksum(addressChecksum);
+    }
+}
+/* unused harmony export default */
+
 
 /***/ }),
 /* 6 */
-/* exports provided: default */
-/*!*******************************!*\
-  !*** ./lib/web3/utils/Hex.js ***!
-  \*******************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("class Hex {\n\n    /**\n     * @param {Object} web3 \n     */\n    constructor(web3) {\n        this.utils = web3.utils;\n    }\n\n    /**\n     * @param {Object | number | string} value \n     * @return {string}\n     */\n    toHex(value) {\n        return this.utils.toHex(value);\n    }\n\n    /**\n     * @param {string} hex \n     * @return {string}\n     */\n    hexToNumberString(hex) {\n        return this.utils.hexToNumberString(hex);\n    }\n\n    /**\n     * @param {string} hex \n     * @return {number}\n     */\n    hexToNumber(hex) {\n        return this.utils.hexToNumber(hex);\n    }\n\n    /**\n     * @param {Object | number | string} hex \n     * @return {string}\n     */\n    numberToHex(value) {\n        return this.utils.numberToHex(value);\n    }\n\n    /**\n     * @param {string} hex \n     * @return {string}\n     */\n    hexToUtf8(hex) {\n        return this.utils.hexToUtf8(hex);\n    }\n\n    /**\n     * @param {string} hex \n     * @return {string}\n     */\n    hexToAscii(hex) {\n        return this.utils.hexToAscii(hex);\n    }\n\n    /**\n     * @param {string} string \n     * @return {string}\n     */\n    utf8ToHex(string) {\n        return this.utils.utf8ToHex(string);\n    }\n\n    /**\n     * @param {string} string \n     * @return {string}\n     */\n    asciiToHex(string) {\n        return this.utils.asciiToHex(string);\n    }\n\n    /**\n     * @param {string} hex \n     * @return {array}\n     */\n    hexToBytes(hex) {\n        return this.utils.hexToBytes(hex);\n    }\n\n    /**\n     * @param {array} array \n     * @return {string}\n     */\n    bytesToHex(array) {\n        return this.utils.bytesToHex(array);\n    }\n\n    /**\n     * @param {number} bytes \n     * @return {string}\n     */\n    randomHex(bytes) {\n        return this.utils.randomHex(bytes);\n    }\n}\n/* unused harmony export default */\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNi5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvd2ViMy91dGlscy9IZXguanM/NTU1ZSJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBjbGFzcyBIZXgge1xuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IHdlYjMgXG4gICAgICovXG4gICAgY29uc3RydWN0b3Iod2ViMykge1xuICAgICAgICB0aGlzLnV0aWxzID0gd2ViMy51dGlscztcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBAcGFyYW0ge09iamVjdCB8IG51bWJlciB8IHN0cmluZ30gdmFsdWUgXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIHRvSGV4KHZhbHVlKSB7XG4gICAgICAgIHJldHVybiB0aGlzLnV0aWxzLnRvSGV4KHZhbHVlKTtcbiAgICB9XG4gICAgXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGhleCBcbiAgICAgKiBAcmV0dXJuIHtzdHJpbmd9XG4gICAgICovXG4gICAgaGV4VG9OdW1iZXJTdHJpbmcoaGV4KSB7XG4gICAgICAgIHJldHVybiB0aGlzLnV0aWxzLmhleFRvTnVtYmVyU3RyaW5nKGhleCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGhleCBcbiAgICAgKiBAcmV0dXJuIHtudW1iZXJ9XG4gICAgICovXG4gICAgaGV4VG9OdW1iZXIoaGV4KSB7XG4gICAgICAgIHJldHVybiB0aGlzLnV0aWxzLmhleFRvTnVtYmVyKGhleCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtPYmplY3QgfCBudW1iZXIgfCBzdHJpbmd9IGhleCBcbiAgICAgKiBAcmV0dXJuIHtzdHJpbmd9XG4gICAgICovXG4gICAgbnVtYmVyVG9IZXgodmFsdWUpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMubnVtYmVyVG9IZXgodmFsdWUpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBoZXggXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIGhleFRvVXRmOChoZXgpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMuaGV4VG9VdGY4KGhleCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGhleCBcbiAgICAgKiBAcmV0dXJuIHtzdHJpbmd9XG4gICAgICovXG4gICAgaGV4VG9Bc2NpaShoZXgpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMuaGV4VG9Bc2NpaShoZXgpO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSB7c3RyaW5nfSBzdHJpbmcgXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIHV0ZjhUb0hleChzdHJpbmcpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMudXRmOFRvSGV4KHN0cmluZyk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHN0cmluZyBcbiAgICAgKiBAcmV0dXJuIHtzdHJpbmd9XG4gICAgICovXG4gICAgYXNjaWlUb0hleChzdHJpbmcpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMuYXNjaWlUb0hleChzdHJpbmcpXG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IGhleCBcbiAgICAgKiBAcmV0dXJuIHthcnJheX1cbiAgICAgKi9cbiAgICBoZXhUb0J5dGVzKGhleCkge1xuICAgICAgICByZXR1cm4gdGhpcy51dGlscy5oZXhUb0J5dGVzKGhleCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHthcnJheX0gYXJyYXkgXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIGJ5dGVzVG9IZXgoYXJyYXkpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMuYnl0ZXNUb0hleChhcnJheSk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtudW1iZXJ9IGJ5dGVzIFxuICAgICAqIEByZXR1cm4ge3N0cmluZ31cbiAgICAgKi9cbiAgICByYW5kb21IZXgoYnl0ZXMpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMucmFuZG9tSGV4KGJ5dGVzKTtcbiAgICB9XG59XG5cblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gbGliL3dlYjMvdXRpbHMvSGV4LmpzIl0sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7OztBQUdBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FBSUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQUlBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FBSUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQUlBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FBSUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQUlBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FBSUE7QUFDQTtBQUNBO0FBL0ZBOzsiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///6\n");
+class Hex {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.utils = web3.utils;
+    }
+
+    /**
+     * @param {Object | number | string} value 
+     * @return {string}
+     */
+    toHex(value) {
+        return this.utils.toHex(value);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {string}
+     */
+    hexToNumberString(hex) {
+        return this.utils.hexToNumberString(hex);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {number}
+     */
+    hexToNumber(hex) {
+        return this.utils.hexToNumber(hex);
+    }
+
+    /**
+     * @param {Object | number | string} hex 
+     * @return {string}
+     */
+    numberToHex(value) {
+        return this.utils.numberToHex(value);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {string}
+     */
+    hexToUtf8(hex) {
+        return this.utils.hexToUtf8(hex);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {string}
+     */
+    hexToAscii(hex) {
+        return this.utils.hexToAscii(hex);
+    }
+
+    /**
+     * @param {string} string 
+     * @return {string}
+     */
+    utf8ToHex(string) {
+        return this.utils.utf8ToHex(string);
+    }
+
+    /**
+     * @param {string} string 
+     * @return {string}
+     */
+    asciiToHex(string) {
+        return this.utils.asciiToHex(string);
+    }
+
+    /**
+     * @param {string} hex 
+     * @return {array}
+     */
+    hexToBytes(hex) {
+        return this.utils.hexToBytes(hex);
+    }
+
+    /**
+     * @param {array} array 
+     * @return {string}
+     */
+    bytesToHex(array) {
+        return this.utils.bytesToHex(array);
+    }
+
+    /**
+     * @param {number} bytes 
+     * @return {string}
+     */
+    randomHex(bytes) {
+        return this.utils.randomHex(bytes);
+    }
+}
+/* unused harmony export default */
+
 
 /***/ }),
 /* 7 */
-/* exports provided: default */
-/*!**********************************!*\
-  !*** ./lib/web3/utils/Number.js ***!
-  \**********************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("class Number {\n\n    /**\n     * @param {Object} web3 \n     */\n    constructor(web3) {\n        this.web3 = web3;\n        this.utils = this.web3.utils;\n        this.bigNummber = this.web3.utils.BN;\n    }\n\n    /**\n     * @param {number} number \n     * @return {string}\n     */\n    toString(number) {\n        return new this.bigNummber(number).toString();\n    }\n\n    /**\n     * @param {number} number\n     * @param {number} numberToAdd\n     * @return {string}\n     */\n    add(number, numberToAdd) {\n        return new this.bigNummber(number).add(new BN(numberToAdd)).toString();\n    }\n\n    /**\n     * @param {Object} number\n     * @return {bool}\n     */\n    isBigNumber(number) {\n        return this.utils.isBigNumber(number);\n    }\n\n    /**\n     * @param {*} number \n     * @param {bool} raw \n     * @return {Object}\n     */\n    toBigNumber(number, raw = undefined) {\n        let bigNummber = this.utils.toBN(number);\n        if (raw) {\n            return bigNummber;\n        }\n\n        let clone = Object.assign({}, this);\n        clone.bigNummber = bigNummber;\n\n        return clone;\n    }\n\n    /**\n     * @param {number} number \n     * @param {string} unit \n     */\n    toWei(number, unit) {\n        return this.utils.toWei(number, unit);\n    }\n\n    /**\n     * @param {number} number \n     * @param {string} unit \n     */\n    fromWei(number, unit) {\n        return this.utils.fromWei(number, unit);\n    }\n}\n/* unused harmony export default */\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNy5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvd2ViMy91dGlscy9OdW1iZXIuanM/MDgxZSJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBjbGFzcyBOdW1iZXIge1xuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IHdlYjMgXG4gICAgICovXG4gICAgY29uc3RydWN0b3Iod2ViMykge1xuICAgICAgICB0aGlzLndlYjMgPSB3ZWIzO1xuICAgICAgICB0aGlzLnV0aWxzID0gdGhpcy53ZWIzLnV0aWxzO1xuICAgICAgICB0aGlzLmJpZ051bW1iZXIgPSB0aGlzLndlYjMudXRpbHMuQk47XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtudW1iZXJ9IG51bWJlciBcbiAgICAgKiBAcmV0dXJuIHtzdHJpbmd9XG4gICAgICovXG4gICAgdG9TdHJpbmcobnVtYmVyKSB7XG4gICAgICAgIHJldHVybiBuZXcgdGhpcy5iaWdOdW1tYmVyKG51bWJlcikudG9TdHJpbmcoKTtcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBAcGFyYW0ge251bWJlcn0gbnVtYmVyXG4gICAgICogQHBhcmFtIHtudW1iZXJ9IG51bWJlclRvQWRkXG4gICAgICogQHJldHVybiB7c3RyaW5nfVxuICAgICAqL1xuICAgIGFkZChudW1iZXIsIG51bWJlclRvQWRkKSB7XG4gICAgICAgIHJldHVybiBuZXcgdGhpcy5iaWdOdW1tYmVyKG51bWJlcikuYWRkKG5ldyBCTihudW1iZXJUb0FkZCkpLnRvU3RyaW5nKCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IG51bWJlclxuICAgICAqIEByZXR1cm4ge2Jvb2x9XG4gICAgICovXG4gICAgaXNCaWdOdW1iZXIobnVtYmVyKSB7XG4gICAgICAgIHJldHVybiB0aGlzLnV0aWxzLmlzQmlnTnVtYmVyKG51bWJlcik7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHsqfSBudW1iZXIgXG4gICAgICogQHBhcmFtIHtib29sfSByYXcgXG4gICAgICogQHJldHVybiB7T2JqZWN0fVxuICAgICAqL1xuICAgIHRvQmlnTnVtYmVyKG51bWJlciwgcmF3ID0gdW5kZWZpbmVkKSB7XG4gICAgICAgIGxldCBiaWdOdW1tYmVyID0gdGhpcy51dGlscy50b0JOKG51bWJlcik7XG4gICAgICAgIGlmKHJhdykge1xuICAgICAgICAgICAgcmV0dXJuIGJpZ051bW1iZXI7XG4gICAgICAgIH1cblxuICAgICAgICBsZXQgY2xvbmUgPSBPYmplY3QuYXNzaWduKHt9LCB0aGlzKTtcbiAgICAgICAgY2xvbmUuYmlnTnVtbWJlciA9IGJpZ051bW1iZXI7XG5cbiAgICAgICAgcmV0dXJuIGNsb25lO1xuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSB7bnVtYmVyfSBudW1iZXIgXG4gICAgICogQHBhcmFtIHtzdHJpbmd9IHVuaXQgXG4gICAgICovXG4gICAgdG9XZWkobnVtYmVyLCB1bml0KSB7XG4gICAgICAgIHJldHVybiB0aGlzLnV0aWxzLnRvV2VpKG51bWJlciwgdW5pdCk7XG4gICAgfVxuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtudW1iZXJ9IG51bWJlciBcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gdW5pdCBcbiAgICAgKi9cbiAgICBmcm9tV2VpKG51bWJlciwgdW5pdCkge1xuICAgICAgICByZXR1cm4gdGhpcy51dGlscy5mcm9tV2VpKG51bWJlciwgdW5pdCk7XG4gICAgfVxufVxuXG5cbi8vIFdFQlBBQ0sgRk9PVEVSIC8vXG4vLyBsaWIvd2ViMy91dGlscy9OdW1iZXIuanMiXSwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTs7O0FBR0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7OztBQUtBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7OztBQUtBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7O0FBSUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQUlBO0FBQ0E7QUFDQTtBQW5FQTs7Iiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///7\n");
+class Number {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.web3 = web3;
+        this.utils = this.web3.utils;
+        this.bigNummber = this.web3.utils.BN;
+    }
+
+    /**
+     * @param {number} number 
+     * @return {string}
+     */
+    toString(number) {
+        return new this.bigNummber(number).toString();
+    }
+
+    /**
+     * @param {number} number
+     * @param {number} numberToAdd
+     * @return {string}
+     */
+    add(number, numberToAdd) {
+        return new this.bigNummber(number).add(new BN(numberToAdd)).toString();
+    }
+
+    /**
+     * @param {Object} number
+     * @return {bool}
+     */
+    isBigNumber(number) {
+        return this.utils.isBigNumber(number);
+    }
+
+    /**
+     * @param {*} number 
+     * @param {bool} raw 
+     * @return {Object}
+     */
+    toBigNumber(number, raw = undefined) {
+        let bigNummber = this.utils.toBN(number);
+        if (raw) {
+            return bigNummber;
+        }
+
+        let clone = Object.assign({}, this);
+        clone.bigNummber = bigNummber;
+
+        return clone;
+    }
+
+    /**
+     * @param {number} number 
+     * @param {string} unit 
+     */
+    toWei(number, unit) {
+        return this.utils.toWei(number, unit);
+    }
+
+    /**
+     * @param {number} number 
+     * @param {string} unit 
+     */
+    fromWei(number, unit) {
+        return this.utils.fromWei(number, unit);
+    }
+}
+/* unused harmony export default */
+
 
 /***/ }),
 /* 8 */
-/* exports provided: default */
-/*!*******************************!*\
-  !*** ./lib/web3/utils/Sha.js ***!
-  \*******************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("class Sha {\n\n    /**\n     * @param {Object} web3 \n     */\n    constructor(web3) {\n        this.utils = web3.utils;\n    }\n\n    /**\n     * @param {string} string \n     */\n    sha3(string) {\n        return this.utils.sha3(string);\n    }\n\n    /**\n     * @param {*} any \n     */\n    soliditySha3(any) {\n        return this.utils.soliditySha3(any);\n    }\n}\n/* unused harmony export default */\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiOC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvd2ViMy91dGlscy9TaGEuanM/M2E0OCJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBjbGFzcyBTaGEge1xuXG4gICAgLyoqXG4gICAgICogQHBhcmFtIHtPYmplY3R9IHdlYjMgXG4gICAgICovXG4gICAgY29uc3RydWN0b3Iod2ViMykge1xuICAgICAgICB0aGlzLnV0aWxzID0gd2ViMy51dGlscztcbiAgICB9XG5cbiAgICAvKipcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gc3RyaW5nIFxuICAgICAqL1xuICAgIHNoYTMoc3RyaW5nKSB7XG4gICAgICAgIHJldHVybiB0aGlzLnV0aWxzLnNoYTMoc3RyaW5nKVxuICAgIH1cblxuICAgIC8qKlxuICAgICAqIEBwYXJhbSB7Kn0gYW55IFxuICAgICAqL1xuICAgIHNvbGlkaXR5U2hhMyhhbnkpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMudXRpbHMuc29saWRpdHlTaGEzKGFueSlcbiAgICB9XG59XG5cblxuLy8gV0VCUEFDSyBGT09URVIgLy9cbi8vIGxpYi93ZWIzL3V0aWxzL1NoYS5qcyJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBOzs7QUFHQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7QUFHQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7QUFHQTtBQUNBO0FBQ0E7QUFyQkE7OyIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///8\n");
+class Sha {
+
+    /**
+     * @param {Object} web3 
+     */
+    constructor(web3) {
+        this.utils = web3.utils;
+    }
+
+    /**
+     * @param {string} string 
+     */
+    sha3(string) {
+        return this.utils.sha3(string);
+    }
+
+    /**
+     * @param {*} any 
+     */
+    soliditySha3(any) {
+        return this.utils.soliditySha3(any);
+    }
+}
+/* unused harmony export default */
+
 
 /***/ }),
 /* 9 */
-/* exports provided: default */
-/* exports used: default */
-/*!****************************!*\
-  !*** ./lib/api/Version.js ***!
-  \****************************/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(/*! ../web3/Contract */ 0);\n\n\nclass Version extends __WEBPACK_IMPORTED_MODULE_0__web3_Contract__[\"a\" /* default */] {\n\n     /**\n      * @param {string} votingRightsAddress \n      * @param {string} votingStrategyAddress \n      * @return {Promise}\n      */\n     createCongress(votingRightsAddress, votingStrategyAddress) {\n          return this.sendTransaction('createCongress', [votingRightsAddress, votingStrategyAddress]);\n     }\n\n     /**\n      * @param {number} contractId \n      * @return {Promise}\n      */\n     destroyCongress(contractId) {\n          return this.sendTransaction('destroyContract', [contractId]);\n     }\n\n     /**\n      * @param {number} congressId \n      * @return {Promise}\n      */\n     getCongress(congressId) {\n          return this.callMethod('getCongress', [congressId]);\n     }\n\n}\n/* harmony export (immutable) */ __webpack_exports__[\"a\"] = Version;\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiOS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9saWIvYXBpL1ZlcnNpb24uanM/N2YwOCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgQ29udHJhY3QgZnJvbSAnLi4vd2ViMy9Db250cmFjdCc7XG5cbmV4cG9ydCBkZWZhdWx0IGNsYXNzIFZlcnNpb24gZXh0ZW5kcyBDb250cmFjdCB7XG5cbiAgICAvKipcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gdm90aW5nUmlnaHRzQWRkcmVzcyBcbiAgICAgKiBAcGFyYW0ge3N0cmluZ30gdm90aW5nU3RyYXRlZ3lBZGRyZXNzIFxuICAgICAqIEByZXR1cm4ge1Byb21pc2V9XG4gICAgICovXG4gICBjcmVhdGVDb25ncmVzcyh2b3RpbmdSaWdodHNBZGRyZXNzLCB2b3RpbmdTdHJhdGVneUFkZHJlc3MpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuc2VuZFRyYW5zYWN0aW9uKCdjcmVhdGVDb25ncmVzcycsIFt2b3RpbmdSaWdodHNBZGRyZXNzLCB2b3RpbmdTdHJhdGVneUFkZHJlc3NdKTtcbiAgIH1cblxuICAgLyoqXG4gICAgKiBAcGFyYW0ge251bWJlcn0gY29udHJhY3RJZCBcbiAgICAqIEByZXR1cm4ge1Byb21pc2V9XG4gICAgKi9cbiAgIGRlc3Ryb3lDb25ncmVzcyhjb250cmFjdElkKSB7XG4gICAgICAgIHJldHVybiB0aGlzLnNlbmRUcmFuc2FjdGlvbignZGVzdHJveUNvbnRyYWN0JywgW2NvbnRyYWN0SWRdKTtcbiAgIH1cblxuICAgLyoqXG4gICAgKiBAcGFyYW0ge251bWJlcn0gY29uZ3Jlc3NJZCBcbiAgICAqIEByZXR1cm4ge1Byb21pc2V9XG4gICAgKi9cbiAgIGdldENvbmdyZXNzKGNvbmdyZXNzSWQpIHtcbiAgICAgICAgcmV0dXJuIHRoaXMuY2FsbE1ldGhvZCgnZ2V0Q29uZ3Jlc3MnLCBbY29uZ3Jlc3NJZF0pXG4gICB9XG5cbn1cblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gbGliL2FwaS9WZXJzaW9uLmpzIl0sIm1hcHBpbmdzIjoiQUFBQTtBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7O0FBS0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQUlBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7QUFJQTtBQUNBO0FBQ0E7QUFDQTtBQTFCQTs7Iiwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///9\n");
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Utils", function() { return Utils; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__web3_Contract__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__web3_Deploy__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__web3_models_ConnectionModel__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__web3_utils_Address__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__web3_utils_Hex__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__web3_utils_Number__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__web3_utils_Sha__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__api_Congress__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__api_Version__ = __webpack_require__(3);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Contract", function() { return __WEBPACK_IMPORTED_MODULE_0__web3_Contract__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Deploy", function() { return __WEBPACK_IMPORTED_MODULE_1__web3_Deploy__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ConnectionModel", function() { return __WEBPACK_IMPORTED_MODULE_2__web3_models_ConnectionModel__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Congress", function() { return __WEBPACK_IMPORTED_MODULE_7__api_Congress__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Version", function() { return __WEBPACK_IMPORTED_MODULE_8__api_Version__["a"]; });
+
+// Web3
+
+
+
+
+
+
+
+
+// Harbour
+
+
+
+// Export public modules
+
 
 /***/ })
 /******/ ]);
