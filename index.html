@@ -10,18 +10,22 @@
     </head>
 
     <body>
-       <script defer>       
+       <script defer> 
+            // Init basic objects      
             var web3 = new Web3();
             web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
             var account = '0x321c00b46f44ea274923232e815aeaca7336f0be';
             var contractData = new Harbour.ContractData();
+            var deployer = new Harbour.Deploy(web3, '0x321c00b46f44ea274923232e815aeaca7336f0be', 470000, 1000000000);
 
+            // create contract data map
             var contractMap = [];
             contractMap.push(contractData.getContractDataObjectByName('votingRight', ['0x321c00b46f44ea274923232e815aeaca7336f0be']));
             contractMap.push(contractData.getContractDataObjectByName('votingStrategy', ['0x321c00b46f44ea274923232e815aeaca7336f0be']));
-            var deployer = new Harbour.Deploy(web3, '0x321c00b46f44ea274923232e815aeaca7336f0be', 470000, 1000000000);
 
+            // deploy contracts
             deployer.deployContracts(contractMap).then(function(result) {
+                // connect to version contract
                 var versionAddress = '0xa312d5a2cb26dd2da28ee34c6e6793949201868b';
                 var versionConnectionModel = new Harbour.ConnectionModel(
                     web3,
@@ -29,8 +33,9 @@
                     versionAddress,
                     account
                 );
-
                 var version = new Harbour.Version(versionConnectionModel);
+
+                // create new DAO
                 version.createCongress(result['votingRight'], result['votingStrategy']).then(function(result) {
                     console.log('DAO CREATED')
                     var payload = '';
@@ -40,7 +45,8 @@
                         versionAddress, 
                         account
                     );
-
+                    
+                    // propose
                     var congress = new Harbour.Congress(congressConnectionModel);
                     congress.propose('myTestPropose', payload).then(function(result) {
                         console.log(result);
