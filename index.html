@@ -14,7 +14,7 @@
             // Init basic objects      
             var web3 = new Web3();
             web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
-            var account = '0x321c00b46f44ea274923232e815aeaca7336f0be';
+            var account = '0x49D1c9d4f08D585D69b4Ed116c205fd82d75ef6c';
 
             var contractData = new Harbour.ContractData();
             var connectionModel = new Harbour.ConnectionModel(
@@ -41,17 +41,17 @@
                 var version = new Harbour.Version(
                     connectionModel,
                     contractData.getContractAbiByName('version'),
-                    '0xa312d5a2cb26dd2da28ee34c6e6793949201868b'
+                    '0x2188000c0b1c21e138796358dacc434cae4363ba'
                 );
 
                 // create new DAO
                 version.createCongress(
-                    contractAddresses['votingRight'],
-                    contractAddresses['votingStrategy']
-                ).then(function(congressAddress) {
+                    contractAddresses.votingRight,
+                    contractAddresses.votingStrategy
+                ).then(function(events) {
                     var payload = '';
-                    version.getCongress(congressAddress).then(function(congress){
-                        // congress.propose('').then(func...
+                    version.getCongress(events.CongressCreated.id).then(function(congress){
+                        console.log('CongressObj', congress)
                     });
                 }).catch(function(error){
                     console.log(error);
