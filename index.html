@@ -1,14 +1,12 @@
 
 
 <!doctype html>
-
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <script src="./web3.min.js"></script>
         <script src="./dist/harbour.js"> </script>
     </head>
-
     <body>
        <script defer> 
             // Init basic objects      
@@ -50,8 +48,9 @@
                     contractAddresses.votingStrategy
                 ).then(function(events) {
                     var payload = '';
+                    //Get congress address
                     version.getCongress(events.CongressCreated.id).then(function(congress){
-                        console.log('CongressObj', congress)
+                        console.log('congress address', congress)
                     });
                 }).catch(function(error){
                     console.log(error);

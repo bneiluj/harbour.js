@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: __dirname + '/lib/harbour.js',
+    entry: __dirname + '/harbour.js',
     output: {
         path: __dirname + '/dist',
         publicPath: '/dist/',

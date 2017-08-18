@@ -26,8 +26,5 @@
     "npm-run-all": "^4.0.2",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.7.1"
-  },
-  "dependencies": {
-    "web3": "^1.0.0-beta2"
   }
 }
