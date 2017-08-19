@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# Package lock for npm (should be "activated" when its merged to the dev-branch)
+package-lock.json
+
+# ABI stuff for testing
+ressources/
