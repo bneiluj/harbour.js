@@ -32,5 +32,5 @@ export default class Version extends Contract {
    getCongress(congressId) {
       return this.callMethod('getCongress', [congressId])
    }
-
 }
+  

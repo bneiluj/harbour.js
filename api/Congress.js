@@ -28,5 +28,4 @@ export default class Congress extends Contract {
     createProposal(proposalFactory, payload) {
         return this.sendTransaction('createProposal', [proposalFactory, payload]);
     }
-
 }
