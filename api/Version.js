@@ -8,13 +8,15 @@ export default class Version extends Contract {
      * @return {Promise}
      */
    createCongress(votingRightsAddress, votingStrategyAddress) {
-      return this.sendTransaction(
-        'createCongress',
-        [
-          votingRightsAddress,
-          votingStrategyAddress
-        ]
-      );
+        return this.getTransactionReturnValues(
+          this.sendTransaction(
+            'createCongress',
+            [
+              votingRightsAddress,
+              votingStrategyAddress
+            ]
+          )
+        );
    }
 
    /**
@@ -22,7 +24,7 @@ export default class Version extends Contract {
     * @return {Promise}
     */
    destroyCongress(contractId) {
-      return this.sendTransaction('destroyContract', [contractId]);
+        return this.sendTransaction('destroyContract', [contractId]);
    }
 
    /**
@@ -30,7 +32,7 @@ export default class Version extends Contract {
     * @return {Promise}
     */
    getCongress(congressId) {
-      return this.callMethod('getCongress', [congressId])
+        return this.callMethod('getCongress', [congressId])
    }
 }
   
