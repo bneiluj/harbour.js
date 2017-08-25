@@ -8,15 +8,7 @@ export default class Version extends Contract {
      * @return {Promise}
      */
    createCongress(votingRightsAddress, votingStrategyAddress) {
-        return this.getTransactionReturnValues(
-          this.sendTransaction(
-            'createCongress',
-            [
-              votingRightsAddress,
-              votingStrategyAddress
-            ]
-          )
-        );
+        return this.sendTransaction('createCongress', [votingRightsAddress, votingStrategyAddress]);
    }
 
    /**
