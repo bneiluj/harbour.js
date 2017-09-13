@@ -1,4 +1,4 @@
-import Contract from '../web3/Contract';
+import Contract from '../lib/web3/Contract';
 
 export default class Version extends Contract {
 
