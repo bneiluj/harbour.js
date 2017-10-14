@@ -7,16 +7,24 @@ module.exports = {
         publicPath: '/dist/',
         filename: 'harbour.js',
         library: "Harbour",
-        libraryTarget: "umd",
+        libraryTarget: "var",
     },
     module: {
         rules: [{
             test: /\.js$/,
             exclude: /node_modules/,
-            use: 'babel-loader'
-        }]
+        }],
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015']
+                }
+            }
+        ]
     },
     resolve: {
-        extensions: ['.js', '.es6']
+        extensions: ['.js']
     }
 };
