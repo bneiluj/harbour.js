@@ -5,9 +5,9 @@ export default class Contract {
     /**
      * @param web3Connection
      * @param contractABI
-     * @param versionAddress
+     * @param address
      */
-    constructor(web3Connection, contractABI, versionAddress) {
+    constructor(web3Connection, contractABI, address) {
         if (!(web3Connection instanceof ConnectionModel)) {
             throw new Error('Argument web3Connection should be an instance of ConnectionModel');
         }
@@ -17,7 +17,7 @@ export default class Contract {
         this.web3 = web3Connection.getWeb3();
         this.contract = new this.web3.eth.Contract(
             this.abi,
-            versionAddress
+            address
         );
         this.address = this.contract._address;
     }

@@ -7,7 +7,7 @@ module.exports = {
         publicPath: '/dist/',
         filename: 'harbour.js',
         library: "Harbour",
-        libraryTarget: "var",
+        libraryTarget: "umd",
     },
     module: {
         rules: [{
