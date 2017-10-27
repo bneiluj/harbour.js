@@ -1,6 +1,20 @@
-export default class VotingRights {
+import Contract from '../../lib/web3/Contract';
 
-	constructor() {
+export default class VotingRights extends Contract {
+
+	canVote() {
+
+	}
+
+	canPropose() {
+
+	}
+
+	canApprove() {
+
+	}
+
+	requiresApproval() {
 
 	}
 }

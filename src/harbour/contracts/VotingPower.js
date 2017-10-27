@@ -1,6 +1,14 @@
-export default class VotingPower {
+import Contract from '../../lib/web3/Contract';
 
-	constructor() {
+export default class VotingPower extends Contract {
+
+	quorumReached() {
 
 	}
+
+	votingWeightOf() {
+
+	}
+
+
 }

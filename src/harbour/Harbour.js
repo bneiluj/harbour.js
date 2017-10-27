@@ -4,6 +4,8 @@ import Version from './contracts/Version.js';
 import Organization from './contracts/Organization.js';
 import VotingPower from './contracts/VotingPower.js';
 import VotingRights from '././contracts/VotingRights.js';
+import * as config from './config.js';
+import * as contractMetadata from './contract-metadata.js';
 
 export default class Harbour {
 
@@ -14,7 +16,8 @@ export default class Harbour {
 	constructor(web3, from) {
 		this.connectionModel = new ConnectionModel(web3, from);
 		this.deploy = new Deploy(this.connectionModel);
-		this.version = new Version();
+		this.version = new Version(config.versionAddress, contractMetadata.version.abi);
+
 	}
 
 	/**
@@ -70,7 +73,11 @@ export default class Harbour {
 	 * @returns {Organization}
 	 */
 	getOrganization(address) {
-		return new Organization(address, this.connectionModel);
+		return new Organization(
+			this.connectionModel,
+			contractMetadata.organization.abi,
+			address
+		);
 	}
 
 	/**
@@ -79,7 +86,11 @@ export default class Harbour {
 	 * @returns {VotingPower}
 	 */
 	getVotingPower(address) {
-		return new VotingPower(address, this.connectionModel);
+		return new VotingPower(
+			this.connectionModel,
+			contractMetadata.organization.abi,
+			address
+		);
 	}
 
 	/**
@@ -88,6 +99,10 @@ export default class Harbour {
 	 * @returns {VotingRights}
 	 */
 	getVotingRights(address) {
-		return new VotingRights(address, this.connectionModel);
+		return new VotingRights(
+			this.connectionModel,
+			contractMetadata.organization.abi,
+			address
+		);
 	}
 }
