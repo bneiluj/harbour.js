@@ -3,19 +3,14 @@ import ConnectionModel from './ConnectionModel';
 export default class Deploy {
 
     /**
-     * @param {Object} connectionModel 
-     * @param {string} from 
-     * @param {number} gas 
-     * @param {number} gasPrice 
+     * @param {Object} connectionModel
      */
-    constructor(connectionModel, from, gas, gasPrice) {
+    constructor(connectionModel) {
         if (!(connectionModel instanceof ConnectionModel)) {
             throw new Error('Argument web3Connection should be an instance of ConnectionModel');
         }
-        this.web3 = connectionModel.getWeb3();
-        this.from = from;
-        this.gas = gas;
-        this.gasPrice = gasPrice;
+        this.connectionModel = connectionModel;
+        this.web3 = this.connectionModel.getWeb3();
     }
 
     /**
@@ -24,15 +19,15 @@ export default class Deploy {
      */
     deployContracts(contractMap) {
         let self = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             let contractAddress = [];
-            contractMap.forEach(function(contract, key){
-                self.deploy(contract.bytecode, contract.arguments).then(function(result){
+            contractMap.forEach((contract, key) => {
+                self.deploy(contract.bytecode, contract.arguments).then((result) => {
                     contractAddress[contract.name] = result.contractAddress;
                     if(key == (contractMap.length - 1)) {
                         resolve(contractAddress);
                     }
-                }).catch(function(error) {
+                }).catch((error) => {
                     reject(error);
                 });
             });
@@ -42,15 +37,17 @@ export default class Deploy {
     /**
      * @param {string} bytecode 
      * @param {array} deployArguments
-     * @return {Promise} 
+     * @param {number} gas
+     * @param {number} gasPrice
+     * @return {Promise}
      */
-    deploy(bytecode, deployArguments) {
+    deploy(bytecode, deployArguments, gas, gasPrice) {
         return new this.web3.eth.sendTransaction(
             {
-                from: this.from,
+                from: this.connectionModel.getFrom(),
                 data: bytecode,
-                gas: this.gas,
-                gasPrice: this.gasPrice,
+                gas: gas,
+                gasPrice: gasPrice,
                 deployArguments 
             }
         );
