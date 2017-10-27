@@ -2,12 +2,20 @@ import Contract from '../../lib/web3/Contract';
 
 export default class VotingPower extends Contract {
 
-	quorumReached() {
-
+	/**
+	 * @param {number} quorum
+	 * @returns {Promise}
+	 */
+	quorumReached(quorum) {
+		return this.executeMethod('quorumReached', [quorum]);
 	}
 
-	votingWeightOf() {
-
+	/**
+	 * @param {string} voter
+	 * @returns {Promise}
+	 */
+	votingWeightOf(voter) {
+		return this.executeMethod('votingWeightOf', [voter]);
 	}
 
 
