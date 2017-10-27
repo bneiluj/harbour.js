@@ -5,12 +5,11 @@ import Organization from './contracts/Organization.js';
 import VotingPower from './contracts/VotingPower.js';
 import VotingRights from '././contracts/VotingRights.js';
 
-
 export default class Harbour {
 
 	/**
-	 * @param web3
-	 * @param from
+	 * @param {Web3} web3
+	 * @param {string} from
 	 */
 	constructor(web3, from) {
 		this.connectionModel = new ConnectionModel(web3, from);
@@ -20,9 +19,9 @@ export default class Harbour {
 
 	/**
 	 * Deploy an harbour organization and return the organization address
-	 * @param votingRights
-	 * @param votingPower
-	 * @returns {*}
+	 * @param {Obejct} votingRights
+	 * @param {Obejct} votingPower
+	 * @returns {Promise}
 	 */
 	async createOrganization(votingRights, votingPower) {
 		let modules = await this.deployModules(votingRights, votingPower);
@@ -30,10 +29,19 @@ export default class Harbour {
 	}
 
 	/**
+	 * Destroys an deployed organization
+	 * @param {number} id
+	 * @returns {Promise}
+	 */
+	async destroyOrganization(id) {
+		return await this.version.destroyOrganization(id);
+	}
+
+	/**
 	 *
-	 * @param votingRights
-	 * @param votingPower
-	 * @returns {*[]}
+	 * @param {Obejct} votingRights
+	 * @param {Obejct} votingPower
+	 * @returns {array}
 	 */
 	async deployModules(votingRights, votingPower) {
 		let votingRightsAddress = await this.deploy.deploy(
@@ -58,7 +66,7 @@ export default class Harbour {
 
 	/**
 	 * Returns an harbour organization
-	 * @param address
+	 * @param {string} address
 	 * @returns {Organization}
 	 */
 	getOrganization(address) {
@@ -67,7 +75,7 @@ export default class Harbour {
 
 	/**
 	 * Returns an harbour organization
-	 * @param address
+	 * @param {string} address
 	 * @returns {VotingPower}
 	 */
 	getVotingPower(address) {
@@ -76,7 +84,7 @@ export default class Harbour {
 
 	/**
 	 * Returns an harbour organization
-	 * @param address
+	 * @param {string} address
 	 * @returns {VotingRights}
 	 */
 	getVotingRights(address) {
