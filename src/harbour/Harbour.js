@@ -4,7 +4,6 @@ import Version from './contracts/Version.js';
 import Organization from './contracts/Organization.js';
 import VotingPower from './contracts/VotingPower.js';
 import VotingRights from '././contracts/VotingRights.js';
-import * as config from './config.js';
 import * as contractMetadata from './contract-metadata.js';
 
 export default class Harbour {
@@ -12,11 +11,12 @@ export default class Harbour {
 	/**
 	 * @param {Web3} web3
 	 * @param {string} from
+	 * @param {string} versionAddress
 	 */
-	constructor(web3, from) {
+	constructor(web3, from, versionAddress) {
 		this.connectionModel = new ConnectionModel(web3, from);
 		this.deploy = new Deploy(this.connectionModel);
-		this.version = new Version(config.versionAddress, contractMetadata.version.abi);
+		this.version = new Version(versionAddress, contractMetadata.version.abi);
 
 	}
 
