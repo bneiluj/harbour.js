@@ -16,7 +16,8 @@ export default class Harbour {
 	constructor(web3, from, versionAddress) {
 		this.connectionModel = new ConnectionModel(web3, from);
 		this.deploy = new Deploy(this.connectionModel);
-		this.version = new Version(versionAddress, contractMetadata.version.abi);
+		this.contractData = contractMetadata;
+		this.version = new Version(versionAddress, this.getAbiFromContractData('Version'));
 
 	}
 
@@ -75,7 +76,7 @@ export default class Harbour {
 	getOrganization(address) {
 		return new Organization(
 			this.connectionModel,
-			contractMetadata.organization.abi,
+			this.getAbiFromContractData('Organization'),
 			address
 		);
 	}
@@ -88,7 +89,7 @@ export default class Harbour {
 	getVotingPower(address) {
 		return new VotingPower(
 			this.connectionModel,
-			contractMetadata.organization.abi,
+			this.getAbiFromContractData('VotingPower'),
 			address
 		);
 	}
@@ -101,8 +102,16 @@ export default class Harbour {
 	getVotingRights(address) {
 		return new VotingRights(
 			this.connectionModel,
-			contractMetadata.organization.abi,
+			this.getAbiFromContractData('VotingRights'),
 			address
 		);
+	}
+
+	/**
+	 * @param contractName
+	 * @returns {Object}
+	 */
+	getAbiFromContractData(contractName) {
+		return this.contractData.filter((contract) => contract.contract_name == contractName)[0].abi;
 	}
 }
