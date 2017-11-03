@@ -1,4 +1,3 @@
-import ConnectionModel from '../lib/web3/ConnectionModel.js';
 import Deploy from '../lib/web3/Deploy.js';
 import Version from './contracts/Version.js';
 import Organization from './contracts/Organization.js';
@@ -10,25 +9,24 @@ export default class Harbour {
 
 	/**
 	 * @param {Web3} web3
-	 * @param {string} from
 	 * @param {string} versionAddress
 	 */
-	constructor(web3, from, versionAddress) {
-		this.connectionModel = new ConnectionModel(web3, from);
-		this.deploy = new Deploy(this.connectionModel);
+	constructor(web3, versionAddress) {
+		this.web3 = web3;
+		this.deploy = new Deploy(this.web3);
 		this.contractData = contractMetadata;
 		this.version = new Version(versionAddress, this.getAbiFromContractData('Version'));
-
 	}
 
 	/**
 	 * Deploy an harbour organization and return the organization address
 	 * @param {Obejct} votingRights
 	 * @param {Obejct} votingPower
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	async createOrganization(votingRights, votingPower) {
-		let modules = await this.deployModules(votingRights, votingPower);
+	async createOrganization(votingRights, votingPower, from) {
+		let modules = await this.deployModules(votingRights, votingPower, from);
 		return await this.version.createOrganization(...modules);
 	}
 
@@ -45,21 +43,24 @@ export default class Harbour {
 	 *
 	 * @param {Obejct} votingRights
 	 * @param {Obejct} votingPower
+	 * @param {string} from
 	 * @returns {array}
 	 */
-	async deployModules(votingRights, votingPower) {
+	async deployModules(votingRights, votingPower, from) {
 		let votingRightsAddress = await this.deploy.deploy(
 			votingRights.bytecode,
 			votingRights.arguments,
 			votingRights.gas,
-			votingRights.gasPrice
+			votingRights.gasPrice,
+			from
 		);
 
 		let votingPowerAddress = await this.deploy.deploy(
 			votingPower.bytecode,
 			votingPower.arguments,
 			votingPower.gas,
-			votingPower.gasPrice
+			votingPower.gasPrice,
+			from
 		);
 
 		return [
@@ -75,9 +76,9 @@ export default class Harbour {
 	 */
 	getOrganization(address) {
 		return new Organization(
-			this.connectionModel,
+			this.web3,
 			this.getAbiFromContractData('Organization'),
-			address
+			address,
 		);
 	}
 
@@ -88,7 +89,7 @@ export default class Harbour {
 	 */
 	getVotingPower(address) {
 		return new VotingPower(
-			this.connectionModel,
+			this.web3,
 			this.getAbiFromContractData('VotingPower'),
 			address
 		);
@@ -101,7 +102,7 @@ export default class Harbour {
 	 */
 	getVotingRights(address) {
 		return new VotingRights(
-			this.connectionModel,
+			this.web3,
 			this.getAbiFromContractData('VotingRights'),
 			address
 		);

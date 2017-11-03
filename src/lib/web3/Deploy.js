@@ -1,28 +1,23 @@
-import ConnectionModel from './ConnectionModel';
-
 export default class Deploy {
 
     /**
-     * @param {Object} connectionModel
+     * @param {Web3} web3
      */
-    constructor(connectionModel) {
-        if (!(connectionModel instanceof ConnectionModel)) {
-            throw new Error('Argument web3Connection should be an instance of ConnectionModel');
-        }
-        this.connectionModel = connectionModel;
-        this.web3 = this.connectionModel.getWeb3();
+    constructor(web3) {
+        this.web3 = web3;
     }
 
     /**
      * @param {array} contractMap 
+     * @param {string} from
      * @return {Object}
      */
-    deployContracts(contractMap) {
+    deployContracts(contractMap, from) {
         let self = this;
         return new Promise((resolve, reject) => {
             let contractAddress = [];
             contractMap.forEach((contract, key) => {
-                self.deploy(contract.bytecode, contract.arguments).then((result) => {
+                self.deploy(contract.bytecode, contract.arguments, from).then((result) => {
                     contractAddress[contract.name] = result.contractAddress;
                     if(key == (contractMap.length - 1)) {
                         resolve(contractAddress);
@@ -39,12 +34,13 @@ export default class Deploy {
      * @param {array} deployArguments
      * @param {number} gas
      * @param {number} gasPrice
+     * @param {string} from
      * @return {Promise}
      */
-    deploy(bytecode, deployArguments, gas, gasPrice) {
+    deploy(bytecode, deployArguments, gas, gasPrice, from) {
         return new this.web3.eth.sendTransaction(
             {
-                from: this.connectionModel.getFrom(),
+                from: from,
                 data: bytecode,
                 gas: gas,
                 gasPrice: gasPrice,

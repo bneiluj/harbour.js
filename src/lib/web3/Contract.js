@@ -1,39 +1,36 @@
-import ConnectionModel from "./ConnectionModel";
-
 export default class Contract {
 
 	/**
-	 * @param web3Connection
+	 * @param web3
 	 * @param contractABI
 	 * @param address
+	 * @param from
 	 */
-	constructor(web3Connection, contractABI, address) {
-		if (!web3Connection instanceof ConnectionModel) {
-			throw new Error('Argument web3Connection should be an instance of ConnectionModel');
-		}
-
-		this.from = web3Connection.getFrom();
+	constructor(web3, contractABI, address, from) {
+		this.from = from;
 		this.abi = contractABI;
-		this.web3 = web3Connection.getWeb3();
+		this.web3 = web3;
 		this.contract = new this.web3.eth.Contract(
 			this.abi,
 			address
 		);
-		this.address = this.contract._address;
 	}
 
 	/**
 	 * Execute method and decide if it is to call or send as transaction
 	 * @param {string} methodName
 	 * @param {array} methodArguments
+	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @returns {Object}
 	 */
-	executeMethod(methodName, methodArguments) {
+	executeMethod(methodName, methodArguments, from, gas, gasPrice) {
 		if (this.getMethodMetaData(methodName).constant) {
 			return this.callMethod(methodName, methodArguments);
 		}
 
-		return this.sendTransaction(methodName, methodArguments);
+		return this.sendTransaction(methodName, methodArguments, from, gas, gasPrice);
 	}
 
 	/**
@@ -113,13 +110,16 @@ export default class Contract {
 	 * Send transaction to call an method
 	 * @param {string} methodName
 	 * @param {array} methodArguments
+	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @return {Object}
 	 */
-	sendTransaction(methodName, methodArguments) {
+	sendTransaction(methodName, methodArguments, from, gas, gasPrice) {
 		return this.getTransactionReturnValues(this.getMethod(methodName, methodArguments).send({
-			from: this.from,
-			gas: 4700000,
-			gasPrice: 1000000
+			from: from,
+			gas: gas,
+			gasPrice: gasPrice
 		}));
 	}
 
