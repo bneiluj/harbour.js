@@ -5,7 +5,7 @@ import VotingPower from './contracts/VotingPower.js';
 import VotingRights from '././contracts/VotingRights.js';
 import * as contractMetadata from './contract-metadata.js';
 
-export default class Harbour {
+export class Harbour {
 
 	/**
 	 * @param {Web3} web3
@@ -14,35 +14,39 @@ export default class Harbour {
 	constructor(web3, versionAddress) {
 		this.web3 = web3;
 		this.deploy = new Deploy(this.web3);
-		this.contractData = contractMetadata;
+		this.contractData = contractMetadata.data;
 		this.version = new Version(versionAddress, this.getAbiFromContractData('Version'));
 	}
 
 	/**
 	 * Deploy an harbour organization and return the organization address
-	 * @param {Obejct} votingRights
-	 * @param {Obejct} votingPower
+	 * @param {Object} votingRights
+	 * @param {Object} votingPower
 	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @returns {Promise}
 	 */
-	async createOrganization(votingRights, votingPower, from) {
-		let modules = await this.deployModules(votingRights, votingPower, from);
-		return await this.version.createOrganization(...modules);
+	async createOrganization(votingRights, votingPower, from, gas, gasPrice) {
+		return await this.version.createOrganization(...await this.deployModules(votingRights, votingPower, from), from, gas, gasPrice);
 	}
 
 	/**
 	 * Destroys an deployed organization
 	 * @param {number} id
+	 * @param {string} from
+	 * @param {number} gas
+	 * @param {number} gasPrice
 	 * @returns {Promise}
 	 */
-	async destroyOrganization(id) {
-		return await this.version.destroyOrganization(id);
+	async destroyOrganization(id, from, gas, gasPrice) {
+		return await this.version.destroyOrganization(id, from, gas, gasPrice);
 	}
 
 	/**
 	 *
-	 * @param {Obejct} votingRights
-	 * @param {Obejct} votingPower
+	 * @param {Object} votingRights
+	 * @param {Object} votingPower
 	 * @param {string} from
 	 * @returns {array}
 	 */

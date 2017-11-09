@@ -1,7 +1,7 @@
 {
   "name": "harbour.js",
   "version": "0.0.1",
-  "description": "Harbour DAO API",
+  "description": "Harbour API",
   "scripts": {
     "start": "npm-run-all --parallel dev:server lint:watch",
     "dev:server": "webpack-dev-server --hot --inline",
@@ -12,7 +12,7 @@
     "test": "jasmine"
   },
   "keywords": [
-    "es6"
+    "harbour, ethereum, blockchain, governance"
   ],
   "author": "Harbour",
   "license": "GNU-GPL",
@@ -26,8 +26,5 @@
     "npm-run-all": "^4.0.2",
     "webpack": "^3.7.1",
     "webpack-dev-server": "^2.7.1"
-  },
-  "dependencies": {
-    "ipfs": "^0.26.0"
   }
 }

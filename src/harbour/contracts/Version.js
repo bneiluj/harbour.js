@@ -1,29 +1,50 @@
-import Contract from '../../lib/web3/Contract';
+import {Contract} from '../../lib/web3/Contract';
 
 export default class Version extends Contract {
 
+
+	/**
+	 * @param {Web3} web3
+	 * @param contractABI
+	 * @param address
+	 */
+	constructor(web3, contractABI, address) {
+		super(web3, contractABI, address);
+	}
 	/**
 	 * @param {string} votingRightsAddress
 	 * @param {string} votingStrategyAddress
+	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @return {Promise}
 	 */
-	createOrganisation(votingRightsAddress, votingStrategyAddress) {
-		return this.executeMethod('createOrganisation', [votingRightsAddress, votingStrategyAddress]);
+	createOrganisation(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
+		return this.executeMethod(
+			'createOrganisation',
+			[
+				votingRightsAddress,
+				votingStrategyAddress
+			],
+			from,
+			gas,
+			gasPrice
+		);
 	}
 
 	/**
 	 * @param {number} contractId
+	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @return {Promise}
 	 */
-	destroyOrganization(contractId) {
-		return this.executeMethod('destroyOrganization', [contractId]);
-	}
-
-	/**
-	 * @param {number} congressId
-	 * @return {Promise}
-	 */
-	getOrganization(congressId) {
-		return this.executeMethod('getOrganization', [congressId])
+	destroyOrganization(contractId, from, gas, gasPrice) {
+		return this.executeMethod(
+			'destroyOrganization',
+			[contractId],
+			from,
+			gas,
+			gasPrice);
 	}
 }
