@@ -129,7 +129,7 @@ class Contract {
 	 */
 	getMethodMetaData(methodName) {
 		let methods = this.abi.filter((method) => {
-				return method.type === "functions"
+				return method.type === "function"
 			}
 		);
 
@@ -146,7 +146,7 @@ class Contract {
 	 * @return {Object}
 	 */
 	getMethodWithArguments(methodName, methodArguments) {
-		return this.contract.methods[methodName].apply(this.contract, methodArguments);
+		return this.contract.methods[methodName](...methodArguments);
 	}
 
 	/**
@@ -196,7 +196,7 @@ class Contract {
 	 * @return {Object}
 	 */
 	sendTransaction(methodName, methodArguments, from, gas, gasPrice) {
-		return this.getTransactionReturnValues(this.getMethod(methodName, methodArguments).send({
+		return this.getTransactionReturnValues(this.getMethodWithArguments(methodName, methodArguments).send({
 			from: from,
 			gas: gas,
 			gasPrice: gasPrice
@@ -315,34 +315,39 @@ class Harbour {
 		this.web3 = web3;
 		this.deploy = new __WEBPACK_IMPORTED_MODULE_0__lib_web3_Deploy_js__["a" /* default */](this.web3);
 		this.contractData = __WEBPACK_IMPORTED_MODULE_5__contract_metadata_js__["a" /* data */];
-		this.version = new __WEBPACK_IMPORTED_MODULE_1__contracts_Version_js__["a" /* default */](versionAddress, this.getAbiFromContractData('Version'));
+		this.version = new __WEBPACK_IMPORTED_MODULE_1__contracts_Version_js__["a" /* default */](this.web3, this.getAbiFromContractData('Version'), versionAddress);
 	}
 
 	/**
 	 * Deploy an harbour organization and return the organization address
-	 * @param {Obejct} votingRights
-	 * @param {Obejct} votingPower
+	 * @param {Object} votingRights
+	 * @param {Object} votingPower
 	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @returns {Promise}
 	 */
-	async createOrganization(votingRights, votingPower, from) {
-		let modules = await this.deployModules(votingRights, votingPower, from);
-		return await this.version.createOrganization(...modules);
+	async createOrganization(votingRights, votingPower, from, gas, gasPrice) {
+		const deployedModules = await this.deployModules(votingRights, votingPower, from);
+		return await this.version.createOrganization(deployedModules['votingRights'], deployedModules['votingPower'], from, gas, gasPrice);
 	}
 
 	/**
 	 * Destroys an deployed organization
 	 * @param {number} id
+	 * @param {string} from
+	 * @param {number} gas
+	 * @param {number} gasPrice
 	 * @returns {Promise}
 	 */
-	async destroyOrganization(id) {
-		return await this.version.destroyOrganization(id);
+	async destroyOrganization(id, from, gas, gasPrice) {
+		return await this.version.destroyOrganization(id, from, gas, gasPrice);
 	}
 
 	/**
 	 *
-	 * @param {Obejct} votingRights
-	 * @param {Obejct} votingPower
+	 * @param {Object} votingRights
+	 * @param {Object} votingPower
 	 * @param {string} from
 	 * @returns {array}
 	 */
@@ -363,10 +368,10 @@ class Harbour {
 			from
 		);
 
-		return [
-			votingRightsAddress,
-			votingPowerAddress
-		];
+		return {
+			votingRights: votingRightsAddress.contractAddress,
+			votingPower: votingPowerAddress.contractAddress
+		};
 	}
 
 	/**
@@ -491,32 +496,49 @@ class Deploy {
 class Version extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /* Contract */] {
 
 
-	constructor(web3, contractABI, address, from) {
-		super(web3, contractABI, address, from);
+	/**
+	 * @param {Web3} web3
+	 * @param contractABI
+	 * @param address
+	 */
+	constructor(web3, contractABI, address) {
+		super(web3, contractABI, address);
 	}
 	/**
 	 * @param {string} votingRightsAddress
 	 * @param {string} votingStrategyAddress
+	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @return {Promise}
 	 */
-	createOrganisation(votingRightsAddress, votingStrategyAddress) {
-		return this.executeMethod('createOrganisation', [votingRightsAddress, votingStrategyAddress]);
+	createOrganization(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
+		return this.executeMethod(
+			'createOrganization',
+			[
+				votingRightsAddress,
+				votingStrategyAddress
+			],
+			from,
+			gas,
+			gasPrice
+		);
 	}
 
 	/**
 	 * @param {number} contractId
+	 * @param {string} from
+	 * @param {string} gas
+	 * @param {string} gasPrice
 	 * @return {Promise}
 	 */
-	destroyOrganization(contractId) {
-		return this.executeMethod('destroyOrganization', [contractId]);
-	}
-
-	/**
-	 * @param {number} congressId
-	 * @return {Promise}
-	 */
-	getOrganization(congressId) {
-		return this.executeMethod('getOrganization', [congressId])
+	destroyOrganization(contractId, from, gas, gasPrice) {
+		return this.executeMethod(
+			'destroyOrganization',
+			[contractId],
+			from,
+			gas,
+			gasPrice);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Version;
@@ -535,50 +557,56 @@ class Organization extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" 
 	/**
 	 * @param {number} proposalId
 	 * @param choice
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	vote(proposalId, choice) {
-		return this.executeMethod('vote', [proposalId, choice]);
+	vote(proposalId, choice, from) {
+		return this.executeMethod('vote', [proposalId, choice], from);
 	}
 
 	/**
 	 * @param {number} proposalId
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	approve(proposalId) {
-		return this.executeMethod('approve', [proposal]);
+	approve(proposalId, from) {
+		return this.executeMethod('approve', [proposalId], from);
 	}
 
 	/**
 	 * @param {string} proposalAddress
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	propose(proposalAddress) {
-		return this.executeMethod('propose', [proposalAddress]);
+	propose(proposalAddress, from) {
+		return this.executeMethod('propose', [proposalAddress], from);
 	}
 
 	/**
 	 * @param {number} proposalId
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	execute(proposalId) {
-		return this.executeMethod('execute', [proposalId]);
+	execute(proposalId, from) {
+		return this.executeMethod('execute', [proposalId], from);
 	}
 
 	/**
 	 * @param {number} proposalId
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	tally(proposalId) {
-		return this.executeMethod('tally', [proposalId]);
+	tally(proposalId, from) {
+		return this.executeMethod('tally', [proposalId], from);
 	}
 
 	/**
 	 * @param {number} optionId
+	 * @param {string} from
 	 * @returns {Promise}
 	 */
-	winningOption(optionId) {
-		return this.executeMethod('winningOption', [optionId]);
+	winningOption(optionId, from) {
+		return this.executeMethod('winningOption', [optionId], from);
 	}
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Organization;

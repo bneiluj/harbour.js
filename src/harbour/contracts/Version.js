@@ -19,9 +19,9 @@ export default class Version extends Contract {
 	 * @param {string} gasPrice
 	 * @return {Promise}
 	 */
-	createOrganisation(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
+	createOrganization(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
 		return this.executeMethod(
-			'createOrganisation',
+			'createOrganization',
 			[
 				votingRightsAddress,
 				votingStrategyAddress

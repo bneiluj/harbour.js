@@ -1,4 +1,4 @@
-export default class Contract {
+export class Contract {
 
 	/**
 	 * @param web3
@@ -49,7 +49,7 @@ export default class Contract {
 	 */
 	getMethodMetaData(methodName) {
 		let methods = this.abi.filter((method) => {
-				return method.type === "functions"
+				return method.type === "function"
 			}
 		);
 
@@ -66,7 +66,7 @@ export default class Contract {
 	 * @return {Object}
 	 */
 	getMethodWithArguments(methodName, methodArguments) {
-		return this.contract.methods[methodName].apply(this.contract, methodArguments);
+		return this.contract.methods[methodName](...methodArguments);
 	}
 
 	/**
@@ -116,7 +116,7 @@ export default class Contract {
 	 * @return {Object}
 	 */
 	sendTransaction(methodName, methodArguments, from, gas, gasPrice) {
-		return this.getTransactionReturnValues(this.getMethod(methodName, methodArguments).send({
+		return this.getTransactionReturnValues(this.getMethodWithArguments(methodName, methodArguments).send({
 			from: from,
 			gas: gas,
 			gasPrice: gasPrice

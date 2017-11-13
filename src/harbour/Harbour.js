@@ -15,7 +15,7 @@ export class Harbour {
 		this.web3 = web3;
 		this.deploy = new Deploy(this.web3);
 		this.contractData = contractMetadata.data;
-		this.version = new Version(versionAddress, this.getAbiFromContractData('Version'));
+		this.version = new Version(this.web3, this.getAbiFromContractData('Version'), versionAddress);
 	}
 
 	/**
@@ -28,7 +28,8 @@ export class Harbour {
 	 * @returns {Promise}
 	 */
 	async createOrganization(votingRights, votingPower, from, gas, gasPrice) {
-		return await this.version.createOrganization(...await this.deployModules(votingRights, votingPower, from), from, gas, gasPrice);
+		const deployedModules = await this.deployModules(votingRights, votingPower, from);
+		return await this.version.createOrganization(deployedModules['votingRights'], deployedModules['votingPower'], from, gas, gasPrice);
 	}
 
 	/**
@@ -67,10 +68,10 @@ export class Harbour {
 			from
 		);
 
-		return [
-			votingRightsAddress,
-			votingPowerAddress
-		];
+		return {
+			votingRights: votingRightsAddress.contractAddress,
+			votingPower: votingPowerAddress.contractAddress
+		};
 	}
 
 	/**
