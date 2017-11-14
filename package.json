@@ -12,7 +12,10 @@
     "test": "jasmine"
   },
   "keywords": [
-    "harbour, ethereum, blockchain, governance"
+    "harbour",
+    "ethereum",
+    "blockchain",
+    "governance"
   ],
   "author": "Harbour",
   "license": "GNU-GPL",
