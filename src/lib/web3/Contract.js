@@ -141,6 +141,7 @@ export class Contract {
 		let contractAdapterClone = Object.assign({}, this);
 		contractAdapterClone.contract = clonedContract;
 		contractAdapterClone.address = clonedContract._address;
+
 		return contractAdapterClone;
 	}
 

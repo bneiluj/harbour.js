@@ -29,7 +29,14 @@ export class Harbour {
 	 */
 	async createOrganization(votingRights, votingPower, from, gas, gasPrice) {
 		const deployedModules = await this.deployModules(votingRights, votingPower, from);
-		return await this.version.createOrganization(deployedModules['votingRights'], deployedModules['votingPower'], from, gas, gasPrice);
+
+		return await this.version.createOrganization(
+			deployedModules['votingRights'],
+			deployedModules['votingPower'],
+			from,
+			gas,
+			gasPrice
+		);
 	}
 
 	/**

@@ -14,6 +14,7 @@ export default class Deploy {
      */
     deployContracts(contractMap, from) {
         let self = this;
+
         return new Promise((resolve, reject) => {
             let contractAddress = [];
             contractMap.forEach((contract, key) => {

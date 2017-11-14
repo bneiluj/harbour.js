@@ -2,7 +2,6 @@ import {Contract} from '../../lib/web3/Contract';
 
 export default class Version extends Contract {
 
-
 	/**
 	 * @param {Web3} web3
 	 * @param contractABI
