@@ -80,207 +80,208 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 class Contract {
 
-	/**
-	 * @param web3
-	 * @param contractABI
-	 * @param address
-	 * @param from
-	 */
-	constructor(web3, contractABI, address, from) {
-		this.from = from;
-		this.abi = contractABI;
-		this.web3 = web3;
-		this.contract = new this.web3.eth.Contract(
-			this.abi,
-			address
-		);
-	}
+    /**
+     * @param web3
+     * @param contractABI
+     * @param address
+     * @param from
+     */
+    constructor(web3, contractABI, address, from) {
+        this.from = from;
+        this.abi = contractABI;
+        this.web3 = web3;
+        this.contract = new this.web3.eth.Contract(
+            this.abi,
+            address
+        );
+    }
 
-	/**
-	 * Execute method and decide if it is to call or send as transaction
-	 * @param {string} methodName
-	 * @param {array} methodArguments
-	 * @param {string} from
-	 * @param {string} gas
-	 * @param {string} gasPrice
-	 * @returns {Object}
-	 */
-	executeMethod(methodName, methodArguments, from, gas, gasPrice) {
-		if (this.getMethodMetaData(methodName).constant) {
-			return this.callMethod(methodName, methodArguments);
-		}
+    /**
+     * Execute method and decide if it is to call or send as transaction
+     * @param {string} methodName
+     * @param {array} methodArguments
+     * @param {string} from
+     * @param {string} gas
+     * @param {string} gasPrice
+     * @returns {Object}
+     */
+    executeMethod(methodName, methodArguments, from, gas, gasPrice) {
+        if (this.getMethodMetaData(methodName).constant) {
+            return this.callMethod(methodName, methodArguments);
+        }
 
-		return this.sendTransaction(methodName, methodArguments, from, gas, gasPrice);
-	}
+        return this.sendTransaction(methodName, methodArguments, from, gas, gasPrice);
+    }
 
-	/**
-	 * Get method form contract
-	 * @param {string} methodName
-	 * @returns {Object}
-	 */
-	getMethod(methodName) {
-		return this.contract.methods[methodName];
-	}
+    /**
+     * Get method form contract
+     * @param {string} methodName
+     * @returns {Object}
+     */
+    getMethod(methodName) {
+        return this.contract.methods[methodName];
+    }
 
-	/**
-	 * Get method metadata from abi
-	 * @param {string} methodName
-	 * @returns {Object}
-	 */
-	getMethodMetaData(methodName) {
-		let methods = this.abi.filter((method) => {
-				return method.type === "function"
-			}
-		);
+    /**
+     * Get method metadata from abi
+     * @param {string} methodName
+     * @returns {Object}
+     */
+    getMethodMetaData(methodName) {
+        let methods = this.abi.filter((method) => {
+                return method.type === "function"
+            }
+        );
 
-		return methods.filter((method) => {
-				return method.name === methodName
-			}
-		)[0];
-	}
+        return methods.filter((method) => {
+                return method.name === methodName
+            }
+        )[0];
+    }
 
-	/**
-	 * Apply arguments to contract method
-	 * @param {string} methodName
-	 * @param {params} methodArguments
-	 * @return {Object}
-	 */
-	getMethodWithArguments(methodName, methodArguments) {
-		return this.contract.methods[methodName](...methodArguments);
-	}
+    /**
+     * Apply arguments to contract method
+     * @param {string} methodName
+     * @param {params} methodArguments
+     * @return {Object}
+     */
+    getMethodWithArguments(methodName, methodArguments) {
+        return this.contract.methods[methodName](...methodArguments);
+    }
 
-	/**
-	 * Get contract options
-	 * @return {Object}
-	 */
-	getOptions() {
-		return this.contract.options
-	}
+    /**
+     * Get contract options
+     * @return {Object}
+     */
+    getOptions() {
+        return this.contract.options
+    }
 
-	/**
-	 * Get Contract option
-	 * @param {string} optionName
-	 * @return {Object}
-	 */
-	getOption(optionName) {
-		return this.contract.options[optionName]
-	}
+    /**
+     * Get Contract option
+     * @param {string} optionName
+     * @return {Object}
+     */
+    getOption(optionName) {
+        return this.contract.options[optionName]
+    }
 
-	/**
-	 * Get estimate gas for method
-	 * @param {string} methodName
-	 * @param {array} methodArguments
-	 * @return {Object}
-	 */
-	estimateGas(methodName, methodArguments) {
-		return this.getMethodWithArguments(methodName, methodArguments).estimateGas();
-	}
+    /**
+     * Get estimate gas for method
+     * @param {string} methodName
+     * @param {array} methodArguments
+     * @return {Object}
+     */
+    estimateGas(methodName, methodArguments) {
+        return this.getMethodWithArguments(methodName, methodArguments).estimateGas();
+    }
 
-	/**
-	 * Call method on contract
-	 * @param {string} methodName
-	 * @param {array} methodArguments
-	 * @return {Object}
-	 */
-	callMethod(methodName, methodArguments) {
-		return this.getMethodWithArguments(methodName, methodArguments).call();
-	}
+    /**
+     * Call method on contract
+     * @param {string} methodName
+     * @param {array} methodArguments
+     * @return {Object}
+     */
+    callMethod(methodName, methodArguments) {
+        return this.getMethodWithArguments(methodName, methodArguments).call();
+    }
 
-	/**
-	 * Send transaction to call an method
-	 * @param {string} methodName
-	 * @param {array} methodArguments
-	 * @param {string} from
-	 * @param {string} gas
-	 * @param {string} gasPrice
-	 * @return {Object}
-	 */
-	sendTransaction(methodName, methodArguments, from, gas, gasPrice) {
-		return this.getTransactionReturnValues(this.getMethodWithArguments(methodName, methodArguments).send({
-			from: from,
-			gas: gas,
-			gasPrice: gasPrice
-		}));
-	}
+    /**
+     * Send transaction to call an method
+     * @param {string} methodName
+     * @param {array} methodArguments
+     * @param {string} from
+     * @param {string} gas
+     * @param {string} gasPrice
+     * @return {Object}
+     */
+    sendTransaction(methodName, methodArguments, from, gas, gasPrice) {
+        return this.getTransactionReturnValues(this.getMethodWithArguments(methodName, methodArguments).send({
+            from: from,
+            gas: gas,
+            gasPrice: gasPrice
+        }));
+    }
 
-	/**
-	 * @param {string} methodName
-	 * @param {array} methodArguments
-	 * @return {Object}
-	 */
-	encodeAbi(methodName, methodArguments) {
-		return this.getMethodWithArguments(methodName, methodArguments).encodeAbi();
-	}
+    /**
+     * @param {string} methodName
+     * @param {array} methodArguments
+     * @return {Object}
+     */
+    encodeAbi(methodName, methodArguments) {
+        return this.getMethodWithArguments(methodName, methodArguments).encodeAbi();
+    }
 
-	/**
-	 * Clone contract and return new contractAdapter instance
-	 * @return {Object}
-	 */
-	clone(web3Contract) {
-		let clonedContract = web3Contract.clone();
-		let contractAdapterClone = Object.assign({}, this);
-		contractAdapterClone.contract = clonedContract;
-		contractAdapterClone.address = clonedContract._address;
-		return contractAdapterClone;
-	}
+    /**
+     * Clone contract and return new contractAdapter instance
+     * @return {Object}
+     */
+    clone(web3Contract) {
+        let clonedContract = web3Contract.clone();
+        let contractAdapterClone = Object.assign({}, this);
+        contractAdapterClone.contract = clonedContract;
+        contractAdapterClone.address = clonedContract._address;
 
-	/**
-	 * Listen for event on contract
-	 * @param {string} eventName
-	 * @param {object} options
-	 * @return {Object}
-	 */
-	listenForEvent(eventName, options = undefined) {
-		return this.contract.events[eventName](options);
-	}
+        return contractAdapterClone;
+    }
 
-	/**
-	 * Listen only once if an event is fired
-	 * @param {string} eventName
-	 * @param {object} options
-	 * @return {Object}
-	 */
-	listenOnceForEvent(eventName, options = undefined) {
-		return this.contract.once(eventName, options);
-	}
+    /**
+     * Listen for event on contract
+     * @param {string} eventName
+     * @param {object} options
+     * @return {Object}
+     */
+    listenForEvent(eventName, options = undefined) {
+        return this.contract.events[eventName](options);
+    }
 
-	/**
-	 * Listen for all events
-	 * @param {object} options
-	 * @return {Object}
-	 */
-	listenForAllEvents(options = undefined) {
-		return this.contract.allEvents(options);
-	}
+    /**
+     * Listen only once if an event is fired
+     * @param {string} eventName
+     * @param {object} options
+     * @return {Object}
+     */
+    listenOnceForEvent(eventName, options = undefined) {
+        return this.contract.once(eventName, options);
+    }
 
-	/**
-	 * Get history of an event
-	 * @param {string} eventName
-	 * @param {object} options
-	 * @return {Object}
-	 */
-	getPastEvents(eventName, options) {
-		return this.contract.getPastEvents(eventName, options);
-	}
+    /**
+     * Listen for all events
+     * @param {object} options
+     * @return {Object}
+     */
+    listenForAllEvents(options = undefined) {
+        return this.contract.allEvents(options);
+    }
 
-	/**
-	 * Returns the events returnValues as promise from the transaction
-	 * @param {Object} transactionPromise
-	 * @return {Object}
-	 */
-	getTransactionReturnValues(transactionPromise) {
-		return new Promise(function (resolve, reject) {
-			transactionPromise.then(function (transaction) {
-				let returnValues = [];
-				Object.keys(transaction.events).forEach(key => {
-					returnValues[key] = transaction.events[key].returnValues;
-				});
-				resolve(returnValues);
-			}).catch(error => {
-				reject(error);
-			});
-		});
-	}
+    /**
+     * Get history of an event
+     * @param {string} eventName
+     * @param {object} options
+     * @return {Object}
+     */
+    getPastEvents(eventName, options) {
+        return this.contract.getPastEvents(eventName, options);
+    }
+
+    /**
+     * Returns the events returnValues as promise from the transaction
+     * @param {Object} transactionPromise
+     * @return {Object}
+     */
+    getTransactionReturnValues(transactionPromise) {
+        return new Promise(function (resolve, reject) {
+            transactionPromise.then(function (transaction) {
+                let returnValues = [];
+                Object.keys(transaction.events).forEach(key => {
+                    returnValues[key] = transaction.events[key].returnValues;
+                });
+                resolve(returnValues);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Contract;
 
@@ -307,119 +308,125 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class Harbour {
 
-	/**
-	 * @param {Web3} web3
-	 * @param {string} versionAddress
-	 */
-	constructor(web3, versionAddress) {
-		this.web3 = web3;
-		this.deploy = new __WEBPACK_IMPORTED_MODULE_0__lib_web3_Deploy_js__["a" /* default */](this.web3);
-		this.contractData = __WEBPACK_IMPORTED_MODULE_5__contract_metadata_js__["a" /* data */];
-		this.version = new __WEBPACK_IMPORTED_MODULE_1__contracts_Version_js__["a" /* default */](this.web3, this.getAbiFromContractData('Version'), versionAddress);
-	}
+    /**
+     * @param {Web3} web3
+     * @param {string} versionAddress
+     */
+    constructor(web3, versionAddress) {
+        this.web3 = web3;
+        this.deploy = new __WEBPACK_IMPORTED_MODULE_0__lib_web3_Deploy_js__["a" /* default */](this.web3);
+        this.contractData = __WEBPACK_IMPORTED_MODULE_5__contract_metadata_js__["a" /* data */];
+        this.version = new __WEBPACK_IMPORTED_MODULE_1__contracts_Version_js__["a" /* default */](this.web3, this.getAbiFromContractData('Version'), versionAddress);
+    }
 
-	/**
-	 * Deploy an harbour organization and return the organization address
-	 * @param {Object} votingRights
-	 * @param {Object} votingPower
-	 * @param {string} from
-	 * @param {string} gas
-	 * @param {string} gasPrice
-	 * @returns {Promise}
-	 */
-	async createOrganization(votingRights, votingPower, from, gas, gasPrice) {
-		const deployedModules = await this.deployModules(votingRights, votingPower, from);
-		return await this.version.createOrganization(deployedModules['votingRights'], deployedModules['votingPower'], from, gas, gasPrice);
-	}
+    /**
+     * Deploy an harbour organization and return the organization address
+     * @param {Object} votingRights
+     * @param {Object} votingPower
+     * @param {string} from
+     * @param {string} gas
+     * @param {string} gasPrice
+     * @returns {Promise}
+     */
+    async createOrganization(votingRights, votingPower, from, gas, gasPrice) {
+        const deployedModules = await this.deployModules(votingRights, votingPower, from);
+        return await this.version.createOrganization(
+            deployedModules['votingRights'],
+            deployedModules['votingPower'],
+            from,
+            gas,
+            gasPrice
+        );
+    }
 
-	/**
-	 * Destroys an deployed organization
-	 * @param {number} id
-	 * @param {string} from
-	 * @param {number} gas
-	 * @param {number} gasPrice
-	 * @returns {Promise}
-	 */
-	async destroyOrganization(id, from, gas, gasPrice) {
-		return await this.version.destroyOrganization(id, from, gas, gasPrice);
-	}
+    /**
+     * Destroys an deployed organization
+     * @param {number} id
+     * @param {string} from
+     * @param {number} gas
+     * @param {number} gasPrice
+     * @returns {Promise}
+     */
+    async destroyOrganization(id, from, gas, gasPrice) {
+        return await this.version.destroyOrganization(id, from, gas, gasPrice);
+    }
 
-	/**
-	 *
-	 * @param {Object} votingRights
-	 * @param {Object} votingPower
-	 * @param {string} from
-	 * @returns {array}
-	 */
-	async deployModules(votingRights, votingPower, from) {
-		let votingRightsAddress = await this.deploy.deploy(
-			votingRights.bytecode,
-			votingRights.arguments,
-			votingRights.gas,
-			votingRights.gasPrice,
-			from
-		);
+    /**
+     *
+     * @param {Object} votingRights
+     * @param {Object} votingPower
+     * @param {string} from
+     * @returns {array}
+     */
+    async deployModules(votingRights, votingPower, from) {
+        let votingRightsAddress = await this.deploy.deploy(
+            votingRights.bytecode,
+            votingRights.arguments,
+            votingRights.gas,
+            votingRights.gasPrice,
+            from
+        );
 
-		let votingPowerAddress = await this.deploy.deploy(
-			votingPower.bytecode,
-			votingPower.arguments,
-			votingPower.gas,
-			votingPower.gasPrice,
-			from
-		);
+        let votingPowerAddress = await this.deploy.deploy(
+            votingPower.bytecode,
+            votingPower.arguments,
+            votingPower.gas,
+            votingPower.gasPrice,
+            from
+        );
 
-		return {
-			votingRights: votingRightsAddress.contractAddress,
-			votingPower: votingPowerAddress.contractAddress
-		};
-	}
+        return {
+            votingRights: votingRightsAddress.contractAddress,
+            votingPower: votingPowerAddress.contractAddress
+        };
+    }
 
-	/**
-	 * Returns an harbour organization
-	 * @param {string} address
-	 * @returns {Organization}
-	 */
-	getOrganization(address) {
-		return new __WEBPACK_IMPORTED_MODULE_2__contracts_Organization_js__["a" /* default */](
-			this.web3,
-			this.getAbiFromContractData('Organization'),
-			address,
-		);
-	}
+    /**
+     * Returns an harbour organization
+     * @param {string} address
+     * @returns {Organization}
+     */
+    getOrganization(address) {
+        return new __WEBPACK_IMPORTED_MODULE_2__contracts_Organization_js__["a" /* default */](
+            this.web3,
+            this.getAbiFromContractData('Organization'),
+            address,
+        );
+    }
 
-	/**
-	 * Returns an harbour organization
-	 * @param {string} address
-	 * @returns {VotingPower}
-	 */
-	getVotingPower(address) {
-		return new __WEBPACK_IMPORTED_MODULE_3__contracts_VotingPower_js__["a" /* default */](
-			this.web3,
-			this.getAbiFromContractData('VotingPower'),
-			address
-		);
-	}
+    /**
+     * Returns an harbour organization
+     * @param {string} address
+     * @returns {VotingPower}
+     */
+    getVotingPower(address) {
+        return new __WEBPACK_IMPORTED_MODULE_3__contracts_VotingPower_js__["a" /* default */](
+            this.web3,
+            this.getAbiFromContractData('VotingPower'),
+            address
+        );
+    }
 
-	/**
-	 * Returns an harbour organization
-	 * @param {string} address
-	 * @returns {VotingRights}
-	 */
-	getVotingRights(address) {
-		return new __WEBPACK_IMPORTED_MODULE_4__contracts_VotingRights_js__["a" /* default */](
-			this.web3,
-			this.getAbiFromContractData('VotingRights'),
-			address
-		);
-	}
+    /**
+     * Returns an harbour organization
+     * @param {string} address
+     * @returns {VotingRights}
+     */
+    getVotingRights(address) {
+        return new __WEBPACK_IMPORTED_MODULE_4__contracts_VotingRights_js__["a" /* default */](
+            this.web3,
+            this.getAbiFromContractData('VotingRights'),
+            address
+        );
+    }
 
-	/**
-	 * @param contractName
-	 * @returns {Object}
-	 */
-	getAbiFromContractData(contractName) {
-		return this.contractData.filter((contract) => contract.contract_name == contractName)[0].abi;
-	}
+    /**
+     * @param contractName
+     * @returns {Object}
+     */
+    getAbiFromContractData(contractName) {
+        return this.contractData.filter((contract) => contract.contract_name == contractName)[0].abi;
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["Harbour"] = Harbour;
 
@@ -446,6 +453,7 @@ class Deploy {
      */
     deployContracts(contractMap, from) {
         let self = this;
+
         return new Promise((resolve, reject) => {
             let contractAddress = [];
             contractMap.forEach((contract, key) => {
@@ -485,6 +493,7 @@ class Deploy {
 /* harmony export (immutable) */ __webpack_exports__["a"] = Deploy;
 
 
+
 /***/ }),
 /* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -495,53 +504,53 @@ class Deploy {
 
 class Version extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /* Contract */] {
 
+    /**
+     * @param {Web3} web3
+     * @param contractABI
+     * @param address
+     */
+    constructor(web3, contractABI, address) {
+        super(web3, contractABI, address);
+    }
+    /**
+     * @param {string} votingRightsAddress
+     * @param {string} votingStrategyAddress
+     * @param {string} from
+     * @param {string} gas
+     * @param {string} gasPrice
+     * @return {Promise}
+     */
+    createOrganization(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
+        return this.executeMethod(
+            'createOrganization',
+            [
+                votingRightsAddress,
+                votingStrategyAddress
+            ],
+            from,
+            gas,
+            gasPrice
+        );
+    }
 
-	/**
-	 * @param {Web3} web3
-	 * @param contractABI
-	 * @param address
-	 */
-	constructor(web3, contractABI, address) {
-		super(web3, contractABI, address);
-	}
-	/**
-	 * @param {string} votingRightsAddress
-	 * @param {string} votingStrategyAddress
-	 * @param {string} from
-	 * @param {string} gas
-	 * @param {string} gasPrice
-	 * @return {Promise}
-	 */
-	createOrganization(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
-		return this.executeMethod(
-			'createOrganization',
-			[
-				votingRightsAddress,
-				votingStrategyAddress
-			],
-			from,
-			gas,
-			gasPrice
-		);
-	}
-
-	/**
-	 * @param {number} contractId
-	 * @param {string} from
-	 * @param {string} gas
-	 * @param {string} gasPrice
-	 * @return {Promise}
-	 */
-	destroyOrganization(contractId, from, gas, gasPrice) {
-		return this.executeMethod(
-			'destroyOrganization',
-			[contractId],
-			from,
-			gas,
-			gasPrice);
-	}
+    /**
+     * @param {number} contractId
+     * @param {string} from
+     * @param {string} gas
+     * @param {string} gasPrice
+     * @return {Promise}
+     */
+    destroyOrganization(contractId, from, gas, gasPrice) {
+        return this.executeMethod(
+            'destroyOrganization',
+            [contractId],
+            from,
+            gas,
+            gasPrice);
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Version;
+
 
 
 /***/ }),
@@ -554,62 +563,63 @@ class Version extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /* Co
 
 class Organization extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /* Contract */] {
 
-	/**
-	 * @param {number} proposalId
-	 * @param choice
-	 * @param {string} from
-	 * @returns {Promise}
-	 */
-	vote(proposalId, choice, from) {
-		return this.executeMethod('vote', [proposalId, choice], from);
-	}
+    /**
+     * @param {number} proposalId
+     * @param choice
+     * @param {string} from
+     * @returns {Promise}
+     */
+    vote(proposalId, choice, from) {
+        return this.executeMethod('vote', [proposalId, choice], from);
+    }
 
-	/**
-	 * @param {number} proposalId
-	 * @param {string} from
-	 * @returns {Promise}
-	 */
-	approve(proposalId, from) {
-		return this.executeMethod('approve', [proposalId], from);
-	}
+    /**
+     * @param {number} proposalId
+     * @param {string} from
+     * @returns {Promise}
+     */
+    approve(proposalId, from) {
+        return this.executeMethod('approve', [proposalId], from);
+    }
 
-	/**
-	 * @param {string} proposalAddress
-	 * @param {string} from
-	 * @returns {Promise}
-	 */
-	propose(proposalAddress, from) {
-		return this.executeMethod('propose', [proposalAddress], from);
-	}
+    /**
+     * @param {string} proposalAddress
+     * @param {string} from
+     * @returns {Promise}
+     */
+    propose(proposalAddress, from) {
+        return this.executeMethod('propose', [proposalAddress], from);
+    }
 
-	/**
-	 * @param {number} proposalId
-	 * @param {string} from
-	 * @returns {Promise}
-	 */
-	execute(proposalId, from) {
-		return this.executeMethod('execute', [proposalId], from);
-	}
+    /**
+     * @param {number} proposalId
+     * @param {string} from
+     * @returns {Promise}
+     */
+    execute(proposalId, from) {
+        return this.executeMethod('execute', [proposalId], from);
+    }
 
-	/**
-	 * @param {number} proposalId
-	 * @param {string} from
-	 * @returns {Promise}
-	 */
-	tally(proposalId, from) {
-		return this.executeMethod('tally', [proposalId], from);
-	}
+    /**
+     * @param {number} proposalId
+     * @param {string} from
+     * @returns {Promise}
+     */
+    tally(proposalId, from) {
+        return this.executeMethod('tally', [proposalId], from);
+    }
 
-	/**
-	 * @param {number} optionId
-	 * @param {string} from
-	 * @returns {Promise}
-	 */
-	winningOption(optionId, from) {
-		return this.executeMethod('winningOption', [optionId], from);
-	}
+    /**
+     * @param {number} optionId
+     * @param {string} from
+     * @returns {Promise}
+     */
+    winningOption(optionId, from) {
+        return this.executeMethod('winningOption', [optionId], from);
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = Organization;
+
 
 
 /***/ }),
@@ -622,25 +632,24 @@ class Organization extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" 
 
 class VotingPower extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /* Contract */] {
 
-	/**
-	 * @param {number} quorum
-	 * @returns {Promise}
-	 */
-	quorumReached(quorum) {
-		return this.executeMethod('quorumReached', [quorum]);
-	}
+    /**
+     * @param {number} quorum
+     * @returns {Promise}
+     */
+    quorumReached(quorum) {
+        return this.executeMethod('quorumReached', [quorum]);
+    }
 
-	/**
-	 * @param {string} voter
-	 * @returns {Promise}
-	 */
-	votingWeightOf(voter) {
-		return this.executeMethod('votingWeightOf', [voter]);
-	}
-
-
+    /**
+     * @param {string} voter
+     * @returns {Promise}
+     */
+    votingWeightOf(voter) {
+        return this.executeMethod('votingWeightOf', [voter]);
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = VotingPower;
+
 
 
 /***/ }),
@@ -653,39 +662,40 @@ class VotingPower extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /
 
 class VotingRights extends __WEBPACK_IMPORTED_MODULE_0__lib_web3_Contract__["a" /* Contract */] {
 
-	/**
-	 * @param {string} voter
-	 * @returns {Promise}
-	 */
-	canVote(voter) {
-		return this.executeMethod('canVote', [voter]);
-	}
+    /**
+     * @param {string} voter
+     * @returns {Promise}
+     */
+    canVote(voter) {
+        return this.executeMethod('canVote', [voter]);
+    }
 
-	/**
-	 * @param {string} proposer
-	 * @returns {Promise}
-	 */
-	canPropose(proposer) {
-		return this.executeMethod('canPropose', [proposer]);
-	}
+    /**
+     * @param {string} proposer
+     * @returns {Promise}
+     */
+    canPropose(proposer) {
+        return this.executeMethod('canPropose', [proposer]);
+    }
 
-	/**
-	 * @param {string} approver
-	 * @returns {Promise}
-	 */
-	canApprove(approver) {
-		return this.executeMethod('canApprove', [approver]);
-	}
+    /**
+     * @param {string} approver
+     * @returns {Promise}
+     */
+    canApprove(approver) {
+        return this.executeMethod('canApprove', [approver]);
+    }
 
-	/**
-	 * @param {number} proposal
-	 * @returns {Object}
-	 */
-	requiresApproval(proposal) {
-		return this.executeMethod('requiresApproval', [proposal]);
-	}
+    /**
+     * @param {number} proposal
+     * @returns {Object}
+     */
+    requiresApproval(proposal) {
+        return this.executeMethod('requiresApproval', [proposal]);
+    }
 }
 /* harmony export (immutable) */ __webpack_exports__["a"] = VotingRights;
+
 
 
 /***/ }),
