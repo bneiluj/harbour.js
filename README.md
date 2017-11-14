@@ -9,7 +9,7 @@ JavaScript API for the Harbour Protocol.
 ## Authors
 * Samuel Furter - [nivida](https://github.com/nivida
 
-See also the list of [contributors](https://github.com/decanus/harbour.js/contributors) who participated in this project.)
+See also the list of [contributors](https://github.com/decanus/harbour.js/contributors) who participated in this project.
 
 ## Versioning
 
