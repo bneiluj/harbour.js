@@ -1,13 +1,12 @@
 var path = require('path');
 
 module.exports = {
-    entry: __dirname + '/harbour.js',
+    entry: __dirname + '/src/harbour/Harbour.js',
     output: {
         path: __dirname + '/dist',
         publicPath: '/dist/',
         filename: 'harbour.js',
-        library: "Harbour",
-        libraryTarget: "var",
+        libraryTarget: "umd",
     },
     module: {
         rules: [{
