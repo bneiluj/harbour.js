@@ -32,7 +32,7 @@ export default class Deploy {
 
     /**
      * @param {string} bytecode 
-     * @param {array} deployArguments
+     * @param {Object} deployArguments
      * @param {number} gas
      * @param {number} gasPrice
      * @param {string} from

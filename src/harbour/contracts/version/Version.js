@@ -1,25 +1,25 @@
-import {Contract} from '../../lib/web3/Contract';
+import {AbstractContract} from '../../../lib/web3/Contract/AbstractContract';
 
-export default class Version extends Contract {
+export default class Version extends AbstractContract {
 
     /**
-     * @param {Web3} web3
-     * @param contractABI
-     * @param address
+     * @param {Methods} methods
      */
-    constructor(web3, contractABI, address) {
-        super(web3, contractABI, address);
+    constructor(methods) {
+        super();
+        this.methods = methods;
     }
+
     /**
      * @param {string} votingRightsAddress
      * @param {string} votingStrategyAddress
      * @param {string} from
-     * @param {string} gas
-     * @param {string} gasPrice
+     * @param {number} gas
+     * @param {number} gasPrice
      * @return {Promise}
      */
     createOrganization(votingRightsAddress, votingStrategyAddress, from, gas, gasPrice) {
-        return this.executeMethod(
+        return this.methods.executeMethod(
             'createOrganization',
             [
                 votingRightsAddress,
@@ -34,16 +34,11 @@ export default class Version extends Contract {
     /**
      * @param {number} contractId
      * @param {string} from
-     * @param {string} gas
-     * @param {string} gasPrice
+     * @param {number} gas
+     * @param {number} gasPrice
      * @return {Promise}
      */
     destroyOrganization(contractId, from, gas, gasPrice) {
-        return this.executeMethod(
-            'destroyOrganization',
-            [contractId],
-            from,
-            gas,
-            gasPrice);
+        return this.methods.executeMethod('destroyOrganization', [contractId], from, gas, gasPrice);
     }
 }
