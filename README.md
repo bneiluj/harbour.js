@@ -1,4 +1,7 @@
 # Harbour.js
+
+**IN DEVELOPMENT, NOT READY FOR PRODUCTION**
+
 JavaScript API for the Harbour Protocol.
 
 ## Development
