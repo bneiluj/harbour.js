@@ -1,39 +1,35 @@
 export class TransactionResponse {
 
-	/**
-	 * @param {Promise} transactionPromise
-	 */
-	constructor(transactionPromise) {
-		this.transactionPromise = transactionPromise;
-	}
+  /**
+   * @param {Promise} transactionPromise
+   */
+  constructor(transactionPromise) {
+    this.transactionPromise = transactionPromise;
+  }
 
-	/**
-	 * @returns {Promise}
-	 */
-	getReturnValues() {
-		return new Promise((resolve, reject) => {
-			this.transactionPromise.then(transactionResponse => {
-				const returnValues = [];
-				Object.keys(transactionResponse.events).forEach(key => {
-					if (isNaN(key)) {
-						returnValues[key] = transactionResponse.events[key].returnValues;
-					}
-				});
+  /**
+   * @returns {Promise}
+   */
+  getEmittedEvents() {
+    return this.transactionPromise.then(transactionResponse => {
+      const returnValues = [];
+      Object.keys(transactionResponse.events).forEach(key => {
+        if (isNaN(key)) {
+          returnValues[key] = transactionResponse.events[key].returnValues;
+        }
+      });
 
-				resolve(returnValues);
-			}).catch(error => reject(error));
-		});
-	}
+      return returnValues;
+    });
+  }
 
-	/**
-	 * @returns {Promise}
-	 */
-	getTransactionHeader() {
-		return new Promise((resolve, reject) => {
-			this.transactionPromise.then(transactionResponse => {
-				delete transactionResponse.events;
-				resolve(transactionResponse);
-			}).catch(error => reject(error));
-		});
-	}
+  /**
+   * @returns {Promise}
+   */
+  getTransactionMetadata() {
+    return this.transactionPromise.then(transactionResponse => {
+      delete transactionResponse.events;
+      return transactionResponse;
+    });
+  }
 }
